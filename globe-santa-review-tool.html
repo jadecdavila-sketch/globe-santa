@@ -1261,19 +1261,19 @@
 
         <div class="translation-note" id="translation-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>You're reading the <strong>English translation</strong>. The original Spanish is preserved — fundraising story excerpts will draw from the original or this translation, with attribution.</span>
+          <span>You're reading the <strong>English translation</strong>. The original Spanish is preserved. Fundraising story excerpts will draw from the original or this translation, with attribution.</span>
         </div>
 
         <article class="letter-body" id="letter-body">
           <div class="letter-greeting" id="letter-greeting">Querido Globe Santa,</div>
           <div id="letter-content">
-            <p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
+            <p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss. Common topic for editor flag.">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
 
-            <p>Los niños han sido tan buenos a través de todo — Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
+            <p>Los niños han sido tan buenos a través de todo. Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
 
-            <p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años — sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>
+            <p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range, and Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años, sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>
           </div>
-          <div class="letter-signature">— Maria</div>
+          <div class="letter-signature">Love, Maria</div>
         </article>
       </div>
 
@@ -1322,7 +1322,7 @@
             </div>
             <div class="check-text">
               <strong>Letter mentions an additional child</strong>
-              <div class="check-detail">Carmen (13) is outside the 12-and-under range. Maria appears to know — no flag set.</div>
+              <div class="check-detail">Carmen (13) is outside the 12-and-under range. Maria appears to know. No flag set.</div>
             </div>
           </div>
         </div>
@@ -1446,7 +1446,7 @@
           <h3>Internal notes</h3>
         </div>
         <div class="notes-body">
-          <textarea placeholder="Notes for the team. Visible to Globe Santa staff only — not to the family."></textarea>
+          <textarea placeholder="Notes for the team. Visible to Globe Santa staff only, not to the family."></textarea>
         </div>
       </div>
 
@@ -1477,15 +1477,15 @@
   // ============= LANGUAGE TABS =============
   const SPANISH = {
     greeting: 'Querido Globe Santa,',
-    body: `<p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
-<p>Los niños han sido tan buenos a través de todo — Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
-<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años — sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>`
+    body: `<p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss. Common topic for editor flag.">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
+<p>Los niños han sido tan buenos a través de todo. Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
+<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range, and Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años, sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>`
   };
   const ENGLISH = {
     greeting: 'Dear Globe Santa,',
-    body: `<p>My name is Maria, and I'm writing about my two children, Sofia and Luis. This year has been the hardest year of our lives. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">My husband lost his job at the warehouse in May</span>, and we've been trying to keep up with rent and food ever since.</p>
-<p>The kids have been so good through all of it — Sofia is 8 and helps me with Luis, who just turned 5. They don't ask for much, but I see them looking at things in stores and I know they understand we can't buy them. I just want them to have one morning that feels like the holidays should feel.</p>
-<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">I have another older daughter, Carmen, who is 13 — I know she's too old for Globe Santa but I want to mention her.</span></p>`
+    body: `<p>My name is Maria, and I'm writing about my two children, Sofia and Luis. This year has been the hardest year of our lives. <span class="ai-highlight" data-tip="Mentions job loss. Common topic for editor flag.">My husband lost his job at the warehouse in May</span>, and we've been trying to keep up with rent and food ever since.</p>
+<p>The kids have been so good through all of it. Sofia is 8 and helps me with Luis, who just turned 5. They don't ask for much, but I see them looking at things in stores and I know they understand we can't buy them. I just want them to have one morning that feels like the holidays should feel.</p>
+<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range, and Maria seems aware. No action needed unless you want to add a note.">I have another older daughter, Carmen, who is 13, and I know she's too old for Globe Santa but I want to mention her.</span></p>`
   };
 
   const tabs = document.querySelectorAll('.lang-tab');

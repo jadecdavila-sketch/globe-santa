@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Globe Santa · Design Principles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Source+Serif+4:opsz,wght@8..60,300..700&family=Source+Sans+3:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF8F3;
+    --parchment: #F4EFE6;
+    --paper: #FFFFFF;
+    --ink: #1A2332;
+    --ink-soft: #2D3848;
+    --ink-muted: #6B6358;
+    --ink-light: #9C9588;
+    --rule: #E5DED1;
+    --rule-soft: #EDE8DC;
+    --red: #B8312F;
+    --red-deep: #8E1F1D;
+    --red-soft: #FBEEEE;
+    --sage: #4A6B5C;
+    --sage-soft: #E8EFE9;
+    --ochre: #C8975A;
+    --ochre-soft: #FBF1DE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--cream);
+    min-height: 100vh;
+    padding: 56px 56px 80px;
+    box-shadow: 0 12px 40px rgba(26, 35, 50, 0.06), 0 24px 80px rgba(26, 35, 50, 0.10);
+  }
+
+  /* ============= LETTERHEAD ============= */
+  .letterhead {
+    text-align: center;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 36px;
+  }
+
+  .wordmark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1;
+    margin-bottom: 8px;
+  }
+  .wordmark .santa {
+    color: var(--red);
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .doc-meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  /* ============= TITLE ============= */
+  h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 14px;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    max-width: 16ch;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--red);
+    font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+  }
+
+  .subtitle {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink-muted);
+    font-weight: 300;
+    margin-bottom: 36px;
+    max-width: 32ch;
+  }
+
+  /* ============= BODY COPY ============= */
+  p {
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+    max-width: 65ch;
+  }
+
+  .lede {
+    font-size: 18.5px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .lede:first-of-type::first-letter {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 0.9;
+    float: left;
+    padding: 6px 8px 0 0;
+    color: var(--red);
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+
+  /* ============= ORNAMENT ============= */
+  .ornament {
+    text-align: center;
+    color: var(--ochre);
+    margin: 36px 0;
+    font-size: 14px;
+    letter-spacing: 0.6em;
+    user-select: none;
+  }
+
+  /* ============= SECTION HEADER ============= */
+  .section-eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-muted);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 22px;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  h2 em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  /* ============= PRINCIPLES ============= */
+  .principles {
+    counter-reset: principle;
+  }
+
+  .principle {
+    counter-increment: principle;
+    padding: 22px 0 22px 70px;
+    border-top: 1px solid var(--rule-soft);
+    position: relative;
+  }
+  .principle:first-child { border-top: none; padding-top: 8px; }
+  .principle:last-child { padding-bottom: 8px; }
+
+  .principle::before {
+    content: counter(principle, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 26px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--ochre);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .principle:first-child::before { top: 8px; }
+
+  .principle h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .principle p {
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 0;
+    max-width: 56ch;
+  }
+
+  /* ============= AI INVENTORY ============= */
+  .inventory-intro {
+    margin-bottom: 28px;
+  }
+
+  .inventory-group {
+    margin-bottom: 28px;
+  }
+
+  .inventory-group-header {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-muted);
+    font-weight: 700;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .inventory-group-header .count {
+    color: var(--ink-light);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+  }
+
+  .ai-touchpoint {
+    padding: 20px 0 18px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .ai-touchpoint:first-of-type { border-top: none; }
+
+  .touchpoint-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .touchpoint-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    font-variation-settings: "opsz" 144;
+  }
+  .touchpoint-tag {
+    display: inline-block;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+  .tag-family {
+    background: var(--sage-soft);
+    color: var(--sage);
+  }
+  .tag-team {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+  }
+
+  .touchpoint-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 14px;
+    padding: 5px 0;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+  .touchpoint-row-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-muted);
+    padding-top: 4px;
+  }
+  .touchpoint-row-content {
+    color: var(--ink-soft);
+    font-family: 'Source Serif 4', serif;
+  }
+  .touchpoint-row.doesnt {
+    margin-top: 4px;
+    padding-left: 12px;
+    border-left: 2px solid var(--red-soft);
+  }
+  .touchpoint-row.doesnt .touchpoint-row-label {
+    color: var(--red);
+  }
+  .touchpoint-row.doesnt .touchpoint-row-content {
+    color: var(--ink);
+  }
+
+  @media (max-width: 600px) {
+    .touchpoint-row { grid-template-columns: 1fr; gap: 2px; }
+    .touchpoint-row-label { padding-top: 0; padding-bottom: 2px; }
+    .touchpoint-row.doesnt { padding-left: 10px; }
+  }
+
+  /* ============= TRADE TABLE ============= */
+  .trade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 26px 30px;
+    margin: 8px 0 12px;
+  }
+  @media (max-width: 600px) {
+    .trade { grid-template-columns: 1fr; gap: 20px; }
+  }
+
+  .trade-side h4 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .trade-for h4 { color: var(--sage); }
+  .trade-against h4 { color: var(--red); }
+
+  .trade-side ul {
+    list-style: none;
+  }
+  .trade-side li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    padding: 5px 0;
+  }
+
+  /* ============= OPEN QUESTIONS ============= */
+  .questions {
+    background: var(--ochre-soft);
+    border-left: 3px solid var(--ochre);
+    padding: 22px 26px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .questions ol {
+    list-style: none;
+    counter-reset: q;
+  }
+  .questions li {
+    counter-increment: q;
+    padding: 9px 0 9px 28px;
+    position: relative;
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .questions li::before {
+    content: counter(q) ".";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ochre);
+    font-variation-settings: "opsz" 144;
+  }
+  .questions li strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ============= CREDO ============= */
+  .credo {
+    margin-top: 48px;
+    padding: 32px 28px;
+    text-align: center;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .credo blockquote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 44ch;
+    margin: 0 auto 14px;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .credo cite {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-light);
+    font-weight: 500;
+    display: block;
+  }
+
+  /* ============= FOOTER ============= */
+  .colophon {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .colophon a {
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+  .colophon a:hover { color: var(--red-deep); }
+  .colophon-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .colophon-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--ink-light);
+  }
+
+  /* ============= TIGHTER ON MOBILE ============= */
+  @media (max-width: 640px) {
+    .page { padding: 36px 24px 60px; box-shadow: none; }
+    h1 { font-size: 34px; }
+    .subtitle { font-size: 17px; margin-bottom: 28px; }
+    .principle { padding-left: 56px; }
+    .principle::before { font-size: 30px; top: 24px; }
+    .principle:first-child::before { top: 6px; }
+    .principle h3 { font-size: 19px; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    body::before { display: none; }
+    .page { box-shadow: none; padding: 24px 0; max-width: none; }
+  }
+  /* ============= PROTOTYPE NAVIGATOR ============= */
+  .proto-nav {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 200;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .proto-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px 8px 12px;
+    background: #1A2332;
+    color: #FBF8F3;
+    border: none;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transition: all 0.2s;
+  }
+  .proto-nav-toggle:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.22); }
+  .proto-nav-toggle svg { width: 13px; height: 13px; opacity: 0.8; }
+  .proto-nav-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #FBF8F3;
+    border: 1px solid #E5DED1;
+    border-radius: 8px;
+    padding: 10px 8px 12px;
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.18), 0 24px 64px rgba(26, 35, 50, 0.12);
+    min-width: 240px;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: all 0.18s ease;
+  }
+  .proto-nav.open .proto-nav-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .proto-nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #9C9588;
+    font-weight: 700;
+    padding: 4px 10px 8px;
+  }
+  .proto-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #1A2332;
+    transition: background 0.15s;
+  }
+  .proto-nav-link:hover { background: #F4EFE6; }
+  .proto-nav-link.is-current {
+    background: #1A2332;
+    color: #FBF8F3;
+  }
+  .proto-nav-link.is-current:hover { background: #2D3848; }
+  .proto-nav-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C8975A;
+    background: #FBF1DE;
+    flex-shrink: 0;
+  }
+  .proto-nav-link.is-current .proto-nav-num {
+    background: #C8975A;
+    color: #FBF8F3;
+  }
+  .proto-nav-link-secondary .proto-nav-num {
+    background: transparent;
+    color: #9C9588;
+    font-size: 14px;
+  }
+  .proto-nav-link.is-current.proto-nav-link-secondary .proto-nav-num {
+    background: rgba(255,255,255,0.15);
+    color: #FBF8F3;
+  }
+  .proto-nav-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.3;
+  }
+  .proto-nav-text strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .proto-nav-text em {
+    font-style: normal;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .proto-nav-divider {
+    height: 1px;
+    background: #E5DED1;
+    margin: 6px 8px;
+  }
+  .proto-nav-link.is-current .proto-nav-text em { opacity: 0.85; }
+  
+</style>
+</head>
+<body data-proto-view="principles">
+
+<article class="page">
+
+  <header class="letterhead">
+    <div class="wordmark">Globe<span class="santa">Santa</span></div>
+    <div class="doc-meta">Design Principles · Draft v1 · May 2026</div>
+  </header>
+
+  <p class="section-eyebrow">A note from design</p>
+  <h1>Designing Globe Santa <em>online</em>.</h1>
+  <p class="subtitle">What we're building — and what we're protecting.</p>
+
+  <p class="lede">For seventy years, Globe Santa has run on a beautifully simple loop. Families write letters. The team reads every one. Gifts arrive before Christmas. And excerpts from those letters fund the next year through the Globe's editorial pages.</p>
+
+  <p>The digital application we're building has to extend that program, not replace it. The risk in any modernization like this one is that the things that make Globe Santa work — voice, dignity, editorial care — get quietly hollowed out in the name of efficiency. We see an opportunity to use AI thoughtfully here: so that more families can apply, in more languages, with less friction, while what reaches Tammy and the editors is <em>more</em> of the family's authentic voice, not less.</p>
+
+  <p>The principles below are the design commitments that make that opportunity real. They are how we'll decide the small questions, and how we'll defend the big ones.</p>
+
+  <div class="ornament">· · ·</div>
+
+  <p class="section-eyebrow">What we believe</p>
+  <h2>Six commitments.</h2>
+
+  <ol class="principles">
+
+    <li class="principle">
+      <h3>The letter is the program.</h3>
+      <p>The letter does three jobs at once: it qualifies the family operationally, it becomes the editorial content that funds next year's giving, and it is an act of testimony — the family being heard. Every design decision is tested against all three.</p>
+    </li>
+
+    <li class="principle">
+      <h3>Capture, don't curate. Translate, don't ventriloquize.</h3>
+      <p>AI lowers the barriers to entry — literacy, language, the "I don't know how to put this into words." It never sits between the family and how they sound. The voice that reaches Tammy is the family's voice.</p>
+    </li>
+
+    <li class="principle">
+      <h3>Voice preservation is non-negotiable.</h3>
+      <p>Original audio or text is always preserved as the source of record. AI may produce additional artifacts — transcription, translation, structured triage data — but never replaces what the family actually said. Excerpts published in The Globe draw from the original or a faithful translation, never AI-polished prose. Authorship stays with the family.</p>
+    </li>
+
+    <li class="principle">
+      <h3>AI augments human work; humans always decide.</h3>
+      <p>Every AI surface in the team's review tool is opinionated but reversible. The system suggests categories, surfaces relevant context, flags anomalies for review. Tammy and the editors accept, reject, override, or ignore. Nothing changes silently.</p>
+    </li>
+
+    <li class="principle">
+      <h3>Soft, never gated. Warm, never alarming.</h3>
+      <p>The form is a conversation, not a turnstile. Disabled buttons with gentle helper text guide families through what's needed. No character minimums on the letter, no error-state red, no email-verification gates stacked against families who most need help. Friction must justify itself against real risks for this program — not borrowed from generic best-practice templates.</p>
+    </li>
+
+    <li class="principle">
+      <h3>Equity is a design requirement, not a phase 2.</h3>
+      <p>Multi-language input from day one, voice for families uncomfortable typing, mobile-first for those who are mobile-only. Globe Santa already runs a Spanish-language phone line. The digital application should continue that promise visibly, in every language Greater Boston families speak.</p>
+    </li>
+
+  </ol>
+
+  <div class="ornament">· · ·</div>
+
+  <p class="section-eyebrow">Specifically</p>
+  <h2>What AI touches — and what it <em>doesn't</em>.</h2>
+
+  <p class="inventory-intro">Principles only matter if you can point to where they live. Below is every place AI touches a family's application or a team member's review: what it does, why, and what we've expressly designed it not to do. Eight surfaces in total — four on the family side, four on the team side. All are demonstrated in the companion prototypes.</p>
+
+  <div class="inventory-group">
+    <div class="inventory-group-header">
+      For families <span class="count">· four surfaces</span>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Voice transcription</span>
+        <span class="touchpoint-tag tag-family">Family-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Converts spoken audio in the family's chosen language into written text the family can review and edit before submitting.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Removes the literacy barrier. A parent who can't easily type — especially in English — can still apply in their own words.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Change the words. Add content. Decide what's "good enough" or "long enough." The original audio is preserved as the source of record.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Language auto-detection</span>
+        <span class="touchpoint-tag tag-family">Family-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Identifies the language the family is speaking or writing, and shows what was detected as a small visible chip.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Removes the upfront "select your language" decision so the form welcomes families in whatever language they bring.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Override the family's choice. Translate silently. The picker remains visible and tappable for correction at any time.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Translation for the team</span>
+        <span class="touchpoint-tag tag-family">Family-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Produces an English translation of letters submitted in other languages, alongside the preserved original.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Lets the editorial team read every letter without requiring families to write in English they may not be comfortable using.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Replace the original. Polish or rewrite. Smooth out cultural or personal voice. Excerpts published in The Globe draw from the original or this faithful translation, with attribution — never AI-rewritten prose.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Soft completeness prompts</span>
+        <span class="touchpoint-tag tag-family">Family-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">After a letter is captured, may ask one or two operational questions if specific data is missing — for example, children's interests for gift selection.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Helps families provide enough information for the program to serve them well, without imposing word counts or character minimums.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Ask editorial questions ("tell us more about your hardship"). Gate submission. Set a minimum length. Each prompt is optional and skippable.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="inventory-group">
+    <div class="inventory-group-header">
+      For the team <span class="count">· four surfaces</span>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Operational checks</span>
+        <span class="touchpoint-tag tag-team">Team-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Runs background verification of required fields, USPS-validated address, delivery-area eligibility, and prior-year participation. Presents results as a checklist.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Removes manual cross-referencing per application so Tammy and the team spend their time on the letter, not on lookups.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Make eligibility decisions. Reject applications. Anything that can't be auto-confirmed is surfaced for human review, never resolved silently.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Letter annotations</span>
+        <span class="touchpoint-tag tag-team">Team-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Highlights spans of the letter where context may be relevant — job loss mentioned, an additional child outside the age range, a recent move. Reasoning revealed on hover.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Surfaces signal Tammy might want to know without forcing her to find it. Speeds reading without replacing it.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Modify the letter. Hide content. Make claims about the family. Annotations are pure overlay on top of unchanged text.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Category suggestions</span>
+        <span class="touchpoint-tag tag-team">Team-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Proposes editorial categories drawn from Tammy's existing taxonomy, with confidence levels, presented as accept/reject pills.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Turns blank-page categorization into a faster reviewing task — accept what's right, dismiss what isn't, add anything missed.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Apply categories without explicit human approval. Override the team's taxonomy. Confidence levels are context, not authority.</span>
+      </div>
+    </div>
+
+    <div class="ai-touchpoint">
+      <div class="touchpoint-head">
+        <span class="touchpoint-name">Editor flag rationale</span>
+        <span class="touchpoint-tag tag-team">Team-facing</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Does</span>
+        <span class="touchpoint-row-content">Notes whether a letter has elements that often resonate in fundraising stories, with the AI's reasoning visible above the toggle.</span>
+      </div>
+      <div class="touchpoint-row">
+        <span class="touchpoint-row-label">Why</span>
+        <span class="touchpoint-row-content">Surfaces editorial-pipeline candidates so flags reach the editorial team faster and more consistently.</span>
+      </div>
+      <div class="touchpoint-row doesnt">
+        <span class="touchpoint-row-label">Doesn't</span>
+        <span class="touchpoint-row-content">Flag without an explicit human toggle. Decide what runs in the paper. The toggle is off by default; the AI's case must convince a human first.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <p class="section-eyebrow">The trade we're proposing</p>
+  <h2>What we're optimizing for, and against.</h2>
+
+  <div class="trade">
+    <div class="trade-side trade-for">
+      <h4>For</h4>
+      <ul>
+        <li>Warmth and dignity at every touchpoint</li>
+        <li>Voice — preserved, never replaced</li>
+        <li>Access for the families most often left out</li>
+        <li>Editorial integrity in fundraising stories</li>
+        <li>Tammy's time on what only humans can do</li>
+      </ul>
+    </div>
+    <div class="trade-side trade-against">
+      <h4>Against</h4>
+      <ul>
+        <li>Friction stacked on the most vulnerable</li>
+        <li>AI doing invisible work on families' words</li>
+        <li>"Modernization" that quietly changes the program</li>
+        <li>Efficiency gains paid for in trust</li>
+        <li>Defaults that work for some, not all</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <p class="section-eyebrow">Decisions still needed</p>
+  <h2>Open questions.</h2>
+
+  <p>These are the calls that the design needs from the program — Foundation, editorial, legal, and operational together. The prototypes can carry placeholders until they're answered.</p>
+
+  <div class="questions">
+    <ol>
+      <li><strong>Editorial disclosure.</strong> When fundraising story excerpts come from translated text, what's the right disclosure? "Translated from Spanish" alongside the quote? In a footer note?</li>
+      <li><strong>Voice recording privacy.</strong> Where do voice recordings live? How long are they retained, and who has access — particularly when the recording mentions minors?</li>
+      <li><strong>The editorial taxonomy.</strong> What categories does Tammy use today? The AI suggestions should reflect her real working vocabulary, not generic guesses.</li>
+      <li><strong>The DTA verification gate.</strong> What does the family see and feel during the wait between submission and verification? What does our communication say?</li>
+      <li><strong>Multilingual scope at launch.</strong> Which languages ship with v1? Spanish at minimum; Haitian Creole, Portuguese, Vietnamese, Cantonese all candidates.</li>
+      <li><strong>The soft-launch audience.</strong> How are the 500–1,000 pilot families chosen, and what specifically are we measuring before scaling to the full program?</li>
+    </ol>
+  </div>
+
+  <div class="credo">
+    <blockquote>On Christmas Day, above all other days, a child should be like all others his age; he should not be forgotten.</blockquote>
+    <cite>The Credo of Globe Santa, 1968</cite>
+  </div>
+
+  <footer class="colophon">
+    <div class="colophon-section">
+      <span class="colophon-label">Prepared by</span>
+      <span>Jade Davila, Design Director, Unosquare</span>
+      <span>For Boston Globe Media · Globe Santa</span>
+    </div>
+    <div class="colophon-section">
+      <span class="colophon-label">Companion prototypes</span>
+      <a href="./index.html">Family-facing application</a>
+      <a href="./globe-santa-review-tool.html">Editorial review tool</a>
+    </div>
+  </footer>
+
+</article>
+
+<div class="proto-nav" id="proto-nav">
+  <button class="proto-nav-toggle" id="proto-nav-toggle" aria-label="Prototype navigator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>Prototype</span>
+  </button>
+  <div class="proto-nav-panel" id="proto-nav-panel">
+    <div class="proto-nav-label">Demo views</div>
+    <a href="globe-santa-prototype.html" class="proto-nav-link" data-view="family">
+      <span class="proto-nav-num">1</span>
+      <span class="proto-nav-text">
+        <strong>Family</strong>
+        <em>The application form</em>
+      </span>
+    </a>
+    <a href="globe-santa-queue.html" class="proto-nav-link" data-view="queue">
+      <span class="proto-nav-num">2</span>
+      <span class="proto-nav-text">
+        <strong>Queue</strong>
+        <em>Tammy's landing</em>
+      </span>
+    </a>
+    <a href="globe-santa-review-tool.html" class="proto-nav-link" data-view="review">
+      <span class="proto-nav-num">3</span>
+      <span class="proto-nav-text">
+        <strong>Review</strong>
+        <em>Single application</em>
+      </span>
+    </a>
+    <div class="proto-nav-divider"></div>
+    <a href="globe-santa-principles.html" class="proto-nav-link proto-nav-link-secondary" data-view="principles">
+      <span class="proto-nav-num">·</span>
+      <span class="proto-nav-text">
+        <strong>Principles</strong>
+        <em>The thinking behind it</em>
+      </span>
+    </a>
+  </div>
+</div>
+<script>
+  (function() {
+    var nav = document.getElementById('proto-nav');
+    var toggle = document.getElementById('proto-nav-toggle');
+    if (!nav || !toggle) return;
+    var current = document.body.getAttribute('data-proto-view');
+    if (current) {
+      var link = nav.querySelector('[data-view="' + current + '"]');
+      if (link) link.classList.add('is-current');
+    }
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target)) nav.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') nav.classList.remove('open');
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1443,7 +1443,7 @@
 
       <div class="consent">
         <h3>Before we begin</h3>
-        <p>We'll ask for your name, address, your children's information, and a letter telling us about your family. Your information is private and used only to send your gifts. The Boston Globe Foundation may share excerpts from your letter (without your name) in fundraising stories — you can opt out on the next-to-last step.</p>
+        <p>We'll ask for your name, address, your children's information, and a letter telling us about your family. Your information is private and used only to send your gifts. The Boston Globe Foundation may share excerpts from your letter (without your name) in fundraising stories. You can opt out on the next-to-last step.</p>
         <label class="checkbox-row">
           <input type="checkbox" id="consent-check" />
           <span>I understand and want to apply.</span>
@@ -1472,7 +1472,7 @@
             <input type="text" id="last-name" autocomplete="family-name" />
           </div>
         </div>
-        <p class="help-text">If you have two last names, write both. Use the spelling you go by — we'll keep it exactly as you give it.</p>
+        <p class="help-text">If you have two last names, write both. Use the spelling you go by, and we'll keep it exactly as you give it.</p>
       </div>
 
       <div class="btn-row">
@@ -1543,7 +1543,7 @@
       </div>
 
       <div class="field-group">
-        <label for="phone">Cell phone <span class="opt">— optional</span></label>
+        <label for="phone">Cell phone <span class="opt">(optional)</span></label>
         <input type="tel" id="phone" autocomplete="tel" placeholder="(617) 555-0123" inputmode="tel" />
         <p class="help-text">Helpful if we have a question about your application. We won't text marketing.</p>
       </div>
@@ -1576,7 +1576,7 @@
     <section class="screen" data-screen="letter">
       <p class="eyebrow">Step 5 of 6 · A letter's journey</p>
       <h1>Your letter to <em>Globe Santa</em>.</h1>
-      <p class="lede">Tell us about your family — what's been hard, what your kids are like, anything you want us to know. Speak or type, in any language you're most comfortable in. We'll read every word.</p>
+      <p class="lede">Tell us about your family: what's been hard, what your kids are like, anything you want us to know. Speak or type, in any language you're most comfortable in. We'll read every word.</p>
 
       <div class="letter-frame">
         <div class="letter-toolbar">
@@ -1658,7 +1658,7 @@
             <button class="rerecord-btn" id="rerecord-btn">Re-record</button>
           </div>
           <div class="letter-area">
-            <textarea class="letter-text" id="transcription-text" rows="8">My name is Maria, and I'm writing about my two children, Sofia and Luis. This year has been the hardest year of our lives. My husband lost his job at the warehouse in May, and we've been trying to keep up with rent and food ever since. The kids have been so good through all of it — Sofia is 8 and helps me with Luis, who just turned 5. They don't ask for much, but I see them looking at things in stores and I know they understand we can't get them. I just want them to have one morning that feels like the holidays the way it should.</textarea>
+            <textarea class="letter-text" id="transcription-text" rows="8">My name is Maria, and I'm writing about my two children, Sofia and Luis. This year has been the hardest year of our lives. My husband lost his job at the warehouse in May, and we've been trying to keep up with rent and food ever since. The kids have been so good through all of it. Sofia is 8 and helps me with Luis, who just turned 5. They don't ask for much, but I see them looking at things in stores and I know they understand we can't get them. I just want them to have one morning that feels like the holidays the way it should.</textarea>
           </div>
 
           <!-- AI prompt -->
@@ -1669,7 +1669,7 @@
               <input type="text" id="ai-answer" placeholder="Sofia loves drawing, Luis loves trucks…" />
               <button id="ai-submit" disabled>Add</button>
             </div>
-            <button class="ai-prompt-skip" id="ai-skip">Skip — that's plenty</button>
+            <button class="ai-prompt-skip" id="ai-skip">Skip, that's plenty</button>
             <div class="ai-prompt-added" id="ai-prompt-added">
               <div class="ai-added-label">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -1748,7 +1748,7 @@
         <p>Globe Santa is funded by donors who read excerpts from real family letters in The Boston Globe. Excerpts never include your full name or address. May we use parts of your letter?</p>
         <label class="checkbox-row">
           <input type="checkbox" id="excerpt-yes" checked />
-          <span>Yes, you may share excerpts (this is the default — most families say yes).</span>
+          <span>Yes, you may share excerpts (this is the default, and most families say yes).</span>
         </label>
         <label class="checkbox-row">
           <input type="checkbox" id="excerpt-no" />
@@ -2396,7 +2396,7 @@
       ? `<div class="review-email-value">${state.email}</div>
          <div class="review-email-note">
            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-           <span>We'll send your confirmation here — please make sure this is right.</span>
+           <span>We'll send your confirmation here. Please make sure this is right.</span>
          </div>`
       : '—';
     const phoneHtml = state.phone ? `<span class="review-phone">${state.phone}</span>` : '';
