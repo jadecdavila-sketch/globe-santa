@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Globe Santa · Editorial Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Source+Serif+4:opsz,wght@8..60,300..700&family=Source+Sans+3:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF8F3;
+    --parchment: #F4EFE6;
+    --paper: #FFFFFF;
+    --ink: #1A2332;
+    --ink-soft: #2D3848;
+    --ink-muted: #6B6358;
+    --ink-light: #9C9588;
+    --rule: #E5DED1;
+    --rule-soft: #EDE8DC;
+    --red: #B8312F;
+    --red-deep: #8E1F1D;
+    --red-soft: #FBEEEE;
+    --sage: #4A6B5C;
+    --sage-soft: #E8EFE9;
+    --ochre: #C8975A;
+    --ochre-soft: #FBF1DE;
+    --navy-dark: #131B26;
+    --shadow-sm: 0 1px 2px rgba(26, 35, 50, 0.04), 0 1px 3px rgba(26, 35, 50, 0.06);
+    --shadow-md: 0 4px 6px rgba(26, 35, 50, 0.05), 0 10px 20px rgba(26, 35, 50, 0.08);
+    --shadow-lg: 0 12px 24px rgba(26, 35, 50, 0.08), 0 24px 48px rgba(26, 35, 50, 0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* ============= TOP NAV ============= */
+  .top-nav {
+    background: var(--navy-dark);
+    color: var(--cream);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-brand {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  .nav-brand .santa {
+    color: #E8423F;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255,255,255,0.18);
+  }
+
+  .nav-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+  }
+
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .queue-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+  .queue-stat strong { color: var(--cream); font-weight: 600; }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ochre);
+    color: var(--navy-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: 'Fraunces', serif;
+  }
+  .user-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ============= SUB-HEADER (app meta) ============= */
+  .meta-bar {
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .meta-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.15s;
+  }
+  .breadcrumb:hover { color: var(--ink); }
+  .breadcrumb svg { width: 13px; height: 13px; }
+
+  .app-id {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144;
+  }
+
+  .meta-tags {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .meta-tags .dot {
+    width: 3px;
+    height: 3px;
+    background: var(--ink-light);
+    border-radius: 50%;
+  }
+
+  .meta-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .status-pending {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+    border: 1px solid #E8C9A0;
+  }
+  .status-pending .pulse {
+    width: 6px;
+    height: 6px;
+    background: var(--ochre);
+    border-radius: 50%;
+    animation: pulseDot 1.6s infinite ease-in-out;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .nav-prev-next {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-arrow {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-arrow:hover { color: var(--ink); border-color: var(--ink-soft); }
+  .nav-arrow svg { width: 14px; height: 14px; }
+
+  /* ============= MAIN GRID ============= */
+  .review-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(360px, 460px);
+    gap: 24px;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1000px) {
+    .review-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ============= LEFT PANE — LETTER ============= */
+  .letter-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  /* Family snapshot */
+  .family-snapshot {
+    padding: 16px 20px;
+  }
+
+  .snapshot-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 8px;
+    padding: 7px 0;
+    font-size: 13px;
+    align-items: baseline;
+  }
+  .snapshot-row + .snapshot-row {
+    border-top: 1px solid var(--rule-soft);
+  }
+  .snapshot-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .snapshot-value {
+    color: var(--ink);
+  }
+  .snapshot-value.serif {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+  }
+  .snapshot-value strong {
+    font-weight: 600;
+  }
+  .snapshot-mini-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    vertical-align: middle;
+  }
+  .mini-flag-ok {
+    background: var(--sage-soft);
+    color: var(--sage);
+  }
+  .mini-flag-pending {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+  }
+
+  /* Children mini-list */
+  .children-list-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .child-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+  }
+  .child-row .child-name { color: var(--ink); font-weight: 500; }
+  .child-row .child-meta { color: var(--ink-muted); font-size: 12px; font-family: 'Source Sans 3', sans-serif; }
+
+  /* ============= LETTER CARD ============= */
+  .letter-card {
+    /* the centerpiece */
+  }
+
+  .letter-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--cream);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lang-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--rule-soft);
+    border-radius: 100px;
+    padding: 2px;
+  }
+  .lang-tab {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lang-tab.active {
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .lang-tab .tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1px 5px;
+    background: var(--rule);
+    color: var(--ink-muted);
+    border-radius: 2px;
+  }
+  .lang-tab.active .tag {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+  }
+
+  .voice-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .play-btn:hover { background: var(--red); transform: scale(1.05); }
+  .play-btn svg { width: 13px; height: 13px; }
+
+  .voice-meta {
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .voice-meta .voice-len {
+    font-family: 'Fraunces', serif;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-soft);
+  }
+
+  /* The letter body */
+  .letter-body {
+    padding: 28px 36px 32px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: var(--ink);
+    background:
+      linear-gradient(var(--paper), var(--paper)) padding-box,
+      linear-gradient(135deg, transparent 60%, var(--ochre-soft) 100%) border-box;
+    position: relative;
+  }
+
+  .letter-greeting {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+  }
+
+  .letter-body p {
+    margin-bottom: 16px;
+  }
+  .letter-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .letter-signature {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--ink-muted);
+  }
+
+  /* AI-highlighted spans inside the letter */
+  .ai-highlight {
+    background: var(--ochre-soft);
+    border-bottom: 1.5px dotted var(--ochre);
+    padding: 1px 2px;
+    border-radius: 2px;
+    cursor: help;
+    transition: background 0.15s;
+  }
+  .ai-highlight:hover {
+    background: #F4DDB8;
+  }
+
+  /* Shared tooltip — JS-positioned with viewport clamping */
+  .ai-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 9px 13px;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.45;
+    max-width: min(280px, calc(100vw - 32px));
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.12s;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+    transform: translate(-9999px, -9999px);
+  }
+  .ai-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .ai-tooltip::after {
+    content: "";
+    position: absolute;
+    border: 5px solid transparent;
+  }
+  .ai-tooltip[data-arrow="down"]::after {
+    bottom: -10px;
+    left: var(--arrow-x, 50%);
+    transform: translateX(-50%);
+    border-top-color: var(--ink);
+  }
+  .ai-tooltip[data-arrow="up"]::after {
+    top: -10px;
+    left: var(--arrow-x, 50%);
+    transform: translateX(-50%);
+    border-bottom-color: var(--ink);
+  }
+
+  /* Translation note */
+  .translation-note {
+    margin: 0;
+    padding: 10px 18px;
+    background: var(--sage-soft);
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .translation-note.visible { display: flex; }
+  .translation-note svg {
+    width: 14px;
+    height: 14px;
+    color: var(--sage);
+    flex-shrink: 0;
+  }
+  .translation-note strong { color: var(--ink); font-weight: 600; }
+
+  /* ============= SECTION HEADERS ============= */
+  .card-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--cream);
+  }
+  .card-header h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-muted);
+    font-weight: 700;
+  }
+  .card-header h3 .count {
+    color: var(--ink-light);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  /* ============= RIGHT PANE — REVIEW TOOLS ============= */
+  .tools-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: start;
+    position: sticky;
+    top: 110px;
+  }
+
+  @media (max-width: 1000px) {
+    .tools-pane {
+      position: static;
+    }
+  }
+
+  /* AI checks list */
+  .ai-checks {
+    padding: 10px 0;
+  }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 18px;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .check-icon svg { width: 11px; height: 11px; }
+  .check-ok { background: var(--sage-soft); color: var(--sage); }
+  .check-pending { background: var(--ochre-soft); color: var(--ochre); }
+  .check-info { background: #DEEEF7; color: #1A4A7C; }
+  .check-fail { background: var(--red-soft); color: var(--red); }
+
+  .check-text {
+    flex: 1;
+  }
+  .check-text strong { font-weight: 600; }
+  .check-detail {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* AI category suggestions */
+  .ai-section {
+    background: linear-gradient(180deg, var(--ochre-soft) 0%, var(--paper) 100%);
+    border: 1px solid #ECC994;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .ai-section-header {
+    padding: 12px 18px 10px;
+    border-bottom: 1px solid #ECC994;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ai-section-header h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ochre);
+    font-weight: 700;
+    flex: 1;
+  }
+  .ai-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    background: var(--ochre);
+    color: var(--paper);
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .ai-pill::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--paper);
+    border-radius: 50%;
+  }
+
+  .ai-section-body {
+    padding: 14px 18px 16px;
+  }
+
+  .ai-intro {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  /* Suggested categories */
+  .suggested-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cat-suggestion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 100px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .cat-suggestion:hover { border-color: var(--ink-soft); }
+
+  .cat-label {
+    padding: 6px 4px 6px 12px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cat-confidence {
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .cat-actions {
+    display: flex;
+    border-left: 1px solid var(--rule);
+  }
+  .cat-btn {
+    width: 26px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-light);
+    transition: all 0.12s;
+  }
+  .cat-btn svg { width: 12px; height: 12px; }
+  .cat-btn:hover { color: var(--ink); background: var(--cream); }
+  .cat-btn.accept:hover { color: var(--sage); background: var(--sage-soft); }
+  .cat-btn.reject:hover { color: var(--red); background: var(--red-soft); }
+  .cat-btn + .cat-btn {
+    border-left: 1px solid var(--rule);
+  }
+
+  /* Accepted categories */
+  .applied-cats {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    display: none;
+  }
+  .applied-cats.has-cats { display: block; }
+  .applied-cats-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .applied-cat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px 5px 11px;
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  .applied-cat-remove {
+    background: rgba(255,255,255,0.18);
+    border: none;
+    color: var(--cream);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    padding: 0;
+  }
+  .applied-cat-remove:hover { background: rgba(255,255,255,0.3); }
+
+  .add-cat-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 4px 0;
+  }
+  .add-cat-link:hover { color: var(--ink); }
+
+  /* Editor flag card */
+  .editor-flag-body {
+    padding: 14px 18px 16px;
+  }
+  .ai-suggestion-block {
+    background: var(--ochre-soft);
+    border-left: 3px solid var(--ochre);
+    padding: 10px 12px;
+    border-radius: 0 4px 4px 0;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .ai-suggestion-block .ai-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ochre);
+    margin-bottom: 4px;
+    font-style: normal;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  /* Fancy switch */
+  .switch {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: var(--rule);
+    border-radius: 100px;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    top: 3px;
+    background: var(--paper);
+    border-radius: 50%;
+    transition: 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .switch input:checked + .slider {
+    background: var(--red);
+  }
+  .switch input:checked + .slider::before {
+    transform: translateX(16px);
+  }
+
+  .toggle-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .editor-subcategory {
+    display: none;
+    margin-top: 10px;
+    animation: slideDown 0.25s ease;
+  }
+  .editor-subcategory.visible { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .field-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  select, textarea, input[type="text"] {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  select:focus, textarea:focus, input:focus {
+    outline: none;
+    border-color: var(--ink-soft);
+    box-shadow: 0 0 0 3px rgba(26, 35, 50, 0.06);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 64px;
+    font-family: 'Source Serif 4', serif;
+    line-height: 1.5;
+  }
+
+  /* Notes card */
+  .notes-body {
+    padding: 14px 18px 16px;
+  }
+
+  /* Decision card — sticky bottom action area */
+  .decision-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .decision-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .decision-buttons .full {
+    grid-column: 1 / -1;
+  }
+
+  .btn {
+    padding: 11px 14px;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn svg { width: 13px; height: 13px; }
+
+  .btn-approve {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-approve:hover { background: var(--sage); }
+
+  .btn-hold {
+    background: var(--paper);
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+  }
+  .btn-hold:hover { border-color: var(--ochre); color: var(--ochre); }
+
+  .btn-decline {
+    background: var(--paper);
+    color: var(--ink-muted);
+    border: 1px solid var(--rule);
+  }
+  .btn-decline:hover { border-color: var(--red); color: var(--red); }
+
+  .saved-toast {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--sage-soft);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--sage);
+    text-align: center;
+    font-weight: 600;
+    display: none;
+    animation: fadeIn 0.3s;
+  }
+  .saved-toast.visible { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+
+  /* ============= PROTOTYPE NAVIGATOR ============= */
+  .proto-nav {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 200;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .proto-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px 8px 12px;
+    background: #1A2332;
+    color: #FBF8F3;
+    border: none;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transition: all 0.2s;
+  }
+  .proto-nav-toggle:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.22); }
+  .proto-nav-toggle svg { width: 13px; height: 13px; opacity: 0.8; }
+  .proto-nav-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #FBF8F3;
+    border: 1px solid #E5DED1;
+    border-radius: 8px;
+    padding: 10px 8px 12px;
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.18), 0 24px 64px rgba(26, 35, 50, 0.12);
+    min-width: 240px;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: all 0.18s ease;
+  }
+  .proto-nav.open .proto-nav-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .proto-nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #9C9588;
+    font-weight: 700;
+    padding: 4px 10px 8px;
+  }
+  .proto-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #1A2332;
+    transition: background 0.15s;
+  }
+  .proto-nav-link:hover { background: #F4EFE6; }
+  .proto-nav-link.is-current {
+    background: #1A2332;
+    color: #FBF8F3;
+  }
+  .proto-nav-link.is-current:hover { background: #2D3848; }
+  .proto-nav-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C8975A;
+    background: #FBF1DE;
+    flex-shrink: 0;
+  }
+  .proto-nav-link.is-current .proto-nav-num {
+    background: #C8975A;
+    color: #FBF8F3;
+  }
+  .proto-nav-link-secondary .proto-nav-num {
+    background: transparent;
+    color: #9C9588;
+    font-size: 14px;
+  }
+  .proto-nav-link.is-current.proto-nav-link-secondary .proto-nav-num {
+    background: rgba(255,255,255,0.15);
+    color: #FBF8F3;
+  }
+  .proto-nav-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.3;
+  }
+  .proto-nav-text strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .proto-nav-text em {
+    font-style: normal;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .proto-nav-divider {
+    height: 1px;
+    background: #E5DED1;
+    margin: 6px 8px;
+  }
+  .proto-nav-link.is-current .proto-nav-text em { opacity: 0.85; }
+  
+</style>
+</head>
+<body data-proto-view="review">
+
+  <!-- ============= TOP NAV ============= -->
+  <nav class="top-nav">
+    <div class="top-nav-left">
+      <span class="nav-brand">Globe<span class="santa">Santa</span></span>
+      <span class="nav-divider"></span>
+      <span class="nav-section-label">Editorial Review</span>
+    </div>
+    <div class="top-nav-right">
+      <div class="queue-stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        <span><strong>47</strong> pending review</span>
+      </div>
+      <div class="user-chip">
+        <div class="user-avatar">T</div>
+        <span class="user-name">Tammy Reilly</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============= META BAR ============= -->
+  <div class="meta-bar">
+    <div class="meta-left">
+      <a href="globe-santa-queue.html" class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back to queue
+      </a>
+      <span class="app-id">Application GS-2026-2857</span>
+      <div class="meta-tags">
+        <span>Submitted 2 hours ago</span>
+        <span class="dot"></span>
+        <span>Source: DTA Connect</span>
+      </div>
+    </div>
+    <div class="meta-right">
+      <span class="status-badge status-pending">
+        <span class="pulse"></span>
+        Awaiting review
+      </span>
+      <div class="nav-prev-next">
+        <button class="nav-arrow" title="Previous application">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button class="nav-arrow" title="Next application">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============= MAIN GRID ============= -->
+  <div class="review-grid">
+
+    <!-- LEFT PANE -->
+    <div class="letter-pane">
+
+      <!-- Family snapshot -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Family</h3>
+        </div>
+        <div class="family-snapshot">
+          <div class="snapshot-row">
+            <div class="snapshot-label">Parent</div>
+            <div class="snapshot-value serif"><strong>Maria Otano Ceballos</strong></div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">Address</div>
+            <div class="snapshot-value serif">
+              47 Jefferson St, Roxbury MA 02119
+              <span class="snapshot-mini-flag mini-flag-ok">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                In delivery area
+              </span>
+            </div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">Contact</div>
+            <div class="snapshot-value serif">m.otano@gmail.com · (617) 555-0142</div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">AP ID</div>
+            <div class="snapshot-value serif">
+              451-728
+              <span class="snapshot-mini-flag mini-flag-pending">
+                <span style="display:inline-block;width:5px;height:5px;background:currentColor;border-radius:50%;"></span>
+                DTA verification pending
+              </span>
+            </div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">Children</div>
+            <div class="snapshot-value">
+              <div class="children-list-mini">
+                <div class="child-row">
+                  <span class="child-name">Sofia Otano</span>
+                  <span class="child-meta">age 8 · girl · DOB 4/12/2017</span>
+                </div>
+                <div class="child-row">
+                  <span class="child-name">Luis Otano</span>
+                  <span class="child-meta">age 5 · boy · DOB 9/8/2020</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Letter card -->
+      <div class="card letter-card">
+        <div class="letter-toolbar">
+          <div class="lang-tabs">
+            <button class="lang-tab active" data-lang="es">
+              Español <span class="tag">Original</span>
+            </button>
+            <button class="lang-tab" data-lang="en">
+              English <span class="tag">Translated</span>
+            </button>
+          </div>
+          <div class="voice-control">
+            <button class="play-btn" id="play-btn" title="Play voice recording">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </button>
+            <span class="voice-meta">
+              Voice <span class="voice-len">1:42</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="translation-note" id="translation-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>You're reading the <strong>English translation</strong>. The original Spanish is preserved — fundraising story excerpts will draw from the original or this translation, with attribution.</span>
+        </div>
+
+        <article class="letter-body" id="letter-body">
+          <div class="letter-greeting" id="letter-greeting">Querido Globe Santa,</div>
+          <div id="letter-content">
+            <p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
+
+            <p>Los niños han sido tan buenos a través de todo — Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
+
+            <p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años — sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>
+          </div>
+          <div class="letter-signature">— Maria</div>
+        </article>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANE — REVIEW TOOLS -->
+    <aside class="tools-pane">
+
+      <!-- AI checks -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Operational checks <span class="count">· 4</span></h3>
+          <span class="ai-pill">AI</span>
+        </div>
+        <div class="ai-checks">
+          <div class="check-row">
+            <div class="check-icon check-ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="check-text">
+              <strong>All required fields complete</strong>
+              <div class="check-detail">Name, address, contact, children info, letter all present.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon check-ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="check-text">
+              <strong>Address in delivery area</strong>
+              <div class="check-detail">Roxbury · USPS verified · Boston region.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon check-ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="check-text">
+              <strong>No prior-year participation</strong>
+              <div class="check-detail">Cross-checked against 2024 and 2025 recipient databases.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon check-info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="check-text">
+              <strong>Letter mentions an additional child</strong>
+              <div class="check-detail">Carmen (13) is outside the 12-and-under range. Maria appears to know — no flag set.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI category suggestions -->
+      <div class="ai-section">
+        <div class="ai-section-header">
+          <h3>Suggested categories</h3>
+          <span class="ai-pill">AI</span>
+        </div>
+        <div class="ai-section-body">
+          <p class="ai-intro">Tap ✓ to apply, ✗ to dismiss. Add your own with the link below.</p>
+          <div class="suggested-cats" id="suggested-cats">
+            <div class="cat-suggestion" data-cat="Unemployment">
+              <span class="cat-label">
+                Unemployment
+                <span class="cat-confidence">High</span>
+              </span>
+              <span class="cat-actions">
+                <button class="cat-btn accept" title="Apply">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+                <button class="cat-btn reject" title="Dismiss">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+            </div>
+            <div class="cat-suggestion" data-cat="Single income">
+              <span class="cat-label">
+                Single income
+                <span class="cat-confidence">High</span>
+              </span>
+              <span class="cat-actions">
+                <button class="cat-btn accept" title="Apply">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+                <button class="cat-btn reject" title="Dismiss">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+            </div>
+            <div class="cat-suggestion" data-cat="Young children">
+              <span class="cat-label">
+                Young children
+                <span class="cat-confidence">Med</span>
+              </span>
+              <span class="cat-actions">
+                <button class="cat-btn accept" title="Apply">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+                <button class="cat-btn reject" title="Dismiss">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+            </div>
+            <div class="cat-suggestion" data-cat="Spanish-speaking">
+              <span class="cat-label">
+                Spanish-speaking
+                <span class="cat-confidence">Med</span>
+              </span>
+              <span class="cat-actions">
+                <button class="cat-btn accept" title="Apply">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+                <button class="cat-btn reject" title="Dismiss">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <div class="applied-cats" id="applied-cats">
+            <div class="applied-cats-label">Applied to this application</div>
+            <div id="applied-cats-list"></div>
+          </div>
+
+          <button class="add-cat-link">+ Add a custom category</button>
+        </div>
+      </div>
+
+      <!-- Editor flag -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Editor flag</h3>
+        </div>
+        <div class="editor-flag-body">
+          <div class="ai-suggestion-block">
+            <span class="ai-tag">AI suggests</span><br>
+            This letter has elements that often resonate in fundraising stories: job loss, two young children, a parent's clear love, and a hopeful close. Worth flagging for editor review.
+          </div>
+
+          <div class="toggle-row">
+            <label class="switch">
+              <input type="checkbox" id="editor-flag-toggle" />
+              <span class="slider"></span>
+            </label>
+            <label class="toggle-label" for="editor-flag-toggle">Flag for editor review</label>
+          </div>
+
+          <div class="editor-subcategory" id="editor-subcategory">
+            <label class="field-label" for="editor-cat">Category</label>
+            <select id="editor-cat">
+              <option>— Choose —</option>
+              <option>Unemployment / job loss</option>
+              <option>Family illness</option>
+              <option>Death in family</option>
+              <option>Single parent / sole earner</option>
+              <option>Housing instability</option>
+              <option>Immigration / new to area</option>
+              <option>Environmental / climate impact</option>
+              <option>Other (note below)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internal notes -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Internal notes</h3>
+        </div>
+        <div class="notes-body">
+          <textarea placeholder="Notes for the team. Visible to Globe Santa staff only — not to the family."></textarea>
+        </div>
+      </div>
+
+      <!-- Decision -->
+      <div class="decision-card">
+        <div class="decision-buttons">
+          <button class="btn btn-approve full" id="approve-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Approve & send to fulfillment
+          </button>
+          <button class="btn btn-hold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Hold
+          </button>
+          <button class="btn btn-decline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Decline
+          </button>
+        </div>
+        <div class="saved-toast" id="saved-toast">✓ Saved · Moving to next application</div>
+      </div>
+
+    </aside>
+
+  </div>
+
+<script>
+  // ============= LANGUAGE TABS =============
+  const SPANISH = {
+    greeting: 'Querido Globe Santa,',
+    body: `<p>Mi nombre es Maria, y les escribo sobre mis dos hijos, Sofia y Luis. Este año ha sido el más difícil de nuestras vidas. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">Mi esposo perdió su trabajo en el almacén en mayo</span>, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces.</p>
+<p>Los niños han sido tan buenos a través de todo — Sofia tiene 8 años y me ayuda con Luis, que acaba de cumplir 5. No piden mucho, pero los veo mirando cosas en las tiendas y sé que entienden que no podemos comprarlas. Solo quiero que tengan una mañana que se sienta como las fiestas deben sentirse.</p>
+<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">Tengo otra hija mayor, Carmen, que tiene 13 años — sé que ella es muy grande para Globe Santa pero quiero mencionarla.</span></p>`
+  };
+  const ENGLISH = {
+    greeting: 'Dear Globe Santa,',
+    body: `<p>My name is Maria, and I'm writing about my two children, Sofia and Luis. This year has been the hardest year of our lives. <span class="ai-highlight" data-tip="Mentions job loss — common topic for editor flag">My husband lost his job at the warehouse in May</span>, and we've been trying to keep up with rent and food ever since.</p>
+<p>The kids have been so good through all of it — Sofia is 8 and helps me with Luis, who just turned 5. They don't ask for much, but I see them looking at things in stores and I know they understand we can't buy them. I just want them to have one morning that feels like the holidays should feel.</p>
+<p><span class="ai-highlight" data-tip="Letter mentions a third child (Carmen, age 13) not on the form. She's outside the 12-and-under range — Maria seems aware. No action needed unless you want to add a note.">I have another older daughter, Carmen, who is 13 — I know she's too old for Globe Santa but I want to mention her.</span></p>`
+  };
+
+  const tabs = document.querySelectorAll('.lang-tab');
+  const greetingEl = document.getElementById('letter-greeting');
+  const contentEl = document.getElementById('letter-content');
+  const noteEl = document.getElementById('translation-note');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const lang = tab.getAttribute('data-lang');
+      if (lang === 'es') {
+        greetingEl.textContent = SPANISH.greeting;
+        contentEl.innerHTML = SPANISH.body;
+        noteEl.classList.remove('visible');
+      } else {
+        greetingEl.textContent = ENGLISH.greeting;
+        contentEl.innerHTML = ENGLISH.body;
+        noteEl.classList.add('visible');
+      }
+    });
+  });
+
+  // ============= TOOLTIP SYSTEM (cursor-anchored, viewport-clamped) =============
+  const tooltip = document.createElement('div');
+  tooltip.className = 'ai-tooltip';
+  document.body.appendChild(tooltip);
+
+  function positionTooltip(cursorX, cursorY) {
+    const PADDING = 16;
+    const GAP = 14;
+
+    // Trigger layout & measure (browser must have finished reflow after textContent set)
+    const tipRect = tooltip.getBoundingClientRect();
+    const tipW = tipRect.width;
+    const tipH = tipRect.height;
+
+    // Vertical: prefer above the cursor, flip below if not enough room
+    let top, arrow;
+    if (cursorY - tipH - GAP >= PADDING) {
+      top = cursorY - tipH - GAP;
+      arrow = 'down';
+    } else {
+      top = cursorY + GAP;
+      arrow = 'up';
+    }
+
+    // Horizontal: center on cursor, clamp inside viewport with padding
+    let left = cursorX - tipW / 2;
+    const maxLeft = Math.max(PADDING, window.innerWidth - tipW - PADDING);
+    left = Math.max(PADDING, Math.min(left, maxLeft));
+
+    // Aim the arrow at the cursor X, even after clamping
+    const arrowX = cursorX - left;
+    const arrowXClamped = Math.max(14, Math.min(arrowX, tipW - 14));
+
+    // Apply via translate so we never depend on top/left coords being measurable
+    tooltip.style.transform = `translate(${left}px, ${top}px)`;
+    tooltip.setAttribute('data-arrow', arrow);
+    tooltip.style.setProperty('--arrow-x', arrowXClamped + 'px');
+  }
+
+  // Event delegation so it survives language tab swaps
+  document.body.addEventListener('mouseover', e => {
+    const target = e.target.closest('.ai-highlight');
+    if (!target) return;
+    const tip = target.getAttribute('data-tip');
+    if (!tip) return;
+    tooltip.textContent = tip;
+    const x = e.clientX;
+    const y = e.clientY;
+    // Position FIRST (while still hidden), THEN show — prevents flash at old location
+    requestAnimationFrame(() => {
+      positionTooltip(x, y);
+      tooltip.classList.add('visible');
+    });
+  });
+  document.body.addEventListener('mouseout', e => {
+    const target = e.target.closest('.ai-highlight');
+    if (!target) return;
+    tooltip.classList.remove('visible');
+  });
+  // hide on scroll so it doesn't drift away from its anchor
+  window.addEventListener('scroll', () => tooltip.classList.remove('visible'), true);
+
+  // ============= AI CATEGORY ACCEPT / REJECT =============
+  const appliedList = document.getElementById('applied-cats-list');
+  const appliedSection = document.getElementById('applied-cats');
+  const applied = new Set();
+
+  function renderApplied() {
+    appliedList.innerHTML = '';
+    if (applied.size === 0) {
+      appliedSection.classList.remove('has-cats');
+      return;
+    }
+    appliedSection.classList.add('has-cats');
+    applied.forEach(cat => {
+      const chip = document.createElement('span');
+      chip.className = 'applied-cat';
+      chip.innerHTML = `${cat}<button class="applied-cat-remove" data-cat="${cat}" title="Remove">×</button>`;
+      appliedList.appendChild(chip);
+    });
+    appliedList.querySelectorAll('.applied-cat-remove').forEach(b => {
+      b.addEventListener('click', e => {
+        applied.delete(e.target.getAttribute('data-cat'));
+        renderApplied();
+      });
+    });
+  }
+
+  document.getElementById('suggested-cats').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if (!btn) return;
+    const suggestion = btn.closest('.cat-suggestion');
+    const cat = suggestion.getAttribute('data-cat');
+    if (btn.classList.contains('accept')) {
+      applied.add(cat);
+      renderApplied();
+    }
+    // Animate out
+    suggestion.style.transition = 'all 0.25s ease';
+    suggestion.style.transform = 'scale(0.8)';
+    suggestion.style.opacity = '0';
+    setTimeout(() => suggestion.remove(), 250);
+  });
+
+  // ============= EDITOR FLAG TOGGLE =============
+  const editorToggle = document.getElementById('editor-flag-toggle');
+  const editorSub = document.getElementById('editor-subcategory');
+  editorToggle.addEventListener('change', e => {
+    if (e.target.checked) {
+      editorSub.classList.add('visible');
+    } else {
+      editorSub.classList.remove('visible');
+    }
+  });
+
+  // ============= VOICE PLAYBACK (simulated) =============
+  const playBtn = document.getElementById('play-btn');
+  let playing = false;
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.innerHTML = playing
+      ? `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+  });
+
+  // ============= DECISION ACTIONS =============
+  const toast = document.getElementById('saved-toast');
+  document.querySelectorAll('.decision-buttons .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2200);
+    });
+  });
+</script>
+
+<div class="proto-nav" id="proto-nav">
+  <button class="proto-nav-toggle" id="proto-nav-toggle" aria-label="Prototype navigator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>Prototype</span>
+  </button>
+  <div class="proto-nav-panel" id="proto-nav-panel">
+    <div class="proto-nav-label">Demo views</div>
+    <a href="globe-santa-prototype.html" class="proto-nav-link" data-view="family">
+      <span class="proto-nav-num">1</span>
+      <span class="proto-nav-text">
+        <strong>Family</strong>
+        <em>The application form</em>
+      </span>
+    </a>
+    <a href="globe-santa-queue.html" class="proto-nav-link" data-view="queue">
+      <span class="proto-nav-num">2</span>
+      <span class="proto-nav-text">
+        <strong>Queue</strong>
+        <em>Tammy's landing</em>
+      </span>
+    </a>
+    <a href="globe-santa-review-tool.html" class="proto-nav-link" data-view="review">
+      <span class="proto-nav-num">3</span>
+      <span class="proto-nav-text">
+        <strong>Review</strong>
+        <em>Single application</em>
+      </span>
+    </a>
+    <div class="proto-nav-divider"></div>
+    <a href="globe-santa-principles.html" class="proto-nav-link proto-nav-link-secondary" data-view="principles">
+      <span class="proto-nav-num">·</span>
+      <span class="proto-nav-text">
+        <strong>Principles</strong>
+        <em>The thinking behind it</em>
+      </span>
+    </a>
+  </div>
+</div>
+<script>
+  (function() {
+    var nav = document.getElementById('proto-nav');
+    var toggle = document.getElementById('proto-nav-toggle');
+    if (!nav || !toggle) return;
+    var current = document.body.getAttribute('data-proto-view');
+    if (current) {
+      var link = nav.querySelector('[data-view="' + current + '"]');
+      if (link) link.classList.add('is-current');
+    }
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target)) nav.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') nav.classList.remove('open');
+    });
+  })();
+</script>
+</body>
+</html>

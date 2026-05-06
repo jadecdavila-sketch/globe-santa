@@ -599,11 +599,14 @@
   }
 
   .input-mode-toggle {
-    display: flex;
+    display: none;
     background: var(--rule);
     border-radius: 100px;
     padding: 2px;
     gap: 0;
+  }
+  .input-mode-toggle.visible {
+    display: flex;
   }
   .input-mode-toggle button {
     padding: 6px 14px;
@@ -644,6 +647,96 @@
   textarea.letter-text::placeholder {
     color: var(--ink-light);
     font-style: italic;
+  }
+
+  /* Mode chooser — first decision: speak or type */
+  .mode-chooser {
+    padding: 26px 22px 24px;
+    min-height: 240px;
+  }
+
+  .mode-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 380px) {
+    .mode-cards { grid-template-columns: 1fr; gap: 10px; }
+  }
+
+  .mode-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 22px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    text-align: center;
+  }
+  .mode-card:hover {
+    border-color: var(--ink-soft);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .mode-card:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mode-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    transition: transform 0.18s ease;
+  }
+  .mode-card:hover .mode-card-icon {
+    transform: scale(1.05);
+  }
+
+  .mode-card-icon-speak {
+    background: var(--red);
+    color: var(--paper);
+    box-shadow: 0 4px 10px rgba(184, 49, 47, 0.22);
+  }
+  .mode-card-icon-write {
+    background: var(--ochre);
+    color: var(--paper);
+    box-shadow: 0 4px 10px rgba(200, 151, 90, 0.24);
+  }
+  .mode-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mode-card-label {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16.5px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+
+  .mode-chooser-desc {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    text-align: center;
+    max-width: 36ch;
+    margin: 0 auto;
+    padding: 0 6px;
   }
 
   /* Voice mode UI */
@@ -858,6 +951,16 @@
     color: var(--cream);
     border-radius: 4px;
     font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+  }
+  .ai-prompt-actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ai-prompt-actions button:not(:disabled):hover {
+    background: var(--ink-soft);
   }
 
   .ai-prompt-skip {
@@ -871,6 +974,68 @@
     padding: 6px 0 0;
     font-family: 'Source Sans 3', sans-serif;
   }
+
+  /* Added (success) state — replaces the question + input when user has added something */
+  .ai-prompt.is-added {
+    background: var(--sage-soft);
+    border-color: var(--sage);
+  }
+  .ai-prompt-added {
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+  .ai-prompt.is-added .ai-prompt-added { display: block; }
+  .ai-prompt.is-added .ai-prompt-label,
+  .ai-prompt.is-added .ai-prompt-question,
+  .ai-prompt.is-added .ai-prompt-actions,
+  .ai-prompt.is-added .ai-prompt-skip { display: none; }
+
+  .ai-added-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    color: var(--sage);
+    margin-bottom: 8px;
+  }
+  .ai-added-label svg {
+    width: 13px;
+    height: 13px;
+    background: var(--sage);
+    color: var(--paper);
+    border-radius: 50%;
+    padding: 2px;
+  }
+
+  .ai-added-quote {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    font-style: italic;
+    padding-left: 12px;
+    border-left: 2px solid var(--sage);
+    margin-bottom: 8px;
+  }
+  .ai-added-quote::before { content: "“"; }
+  .ai-added-quote::after { content: "”"; }
+
+  .ai-added-edit {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .ai-added-edit:hover { color: var(--ink); }
 
   /* Letter footer note */
   .letter-promise {
@@ -1076,33 +1241,180 @@
     display: none;
   }
 
-  /* Footer prototype banner */
-  .proto-banner {
-    position: fixed;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--ink);
-    color: var(--cream);
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    padding: 6px 14px;
-    border-radius: 100px;
-    z-index: 100;
-    opacity: 0.7;
-    pointer-events: none;
-  }
+
 
   @media (max-width: 500px) {
     .app { box-shadow: none; }
     main { padding: 28px 22px 32px; }
     h1 { font-size: 30px; }
   }
+  /* Prototype handoff — sits below the Done button, walks demos to the next surface */
+  .proto-handoff {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 14px 18px;
+    border: 1px dashed var(--ink-light);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .proto-handoff:hover {
+    border-color: var(--ink-soft);
+    color: var(--ink);
+    background: var(--paper);
+  }
+  .proto-handoff svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: transform 0.15s;
+  }
+  .proto-handoff:hover svg {
+    transform: translateX(2px);
+    opacity: 1;
+  }
+  .proto-handoff-tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ochre);
+    padding: 2px 6px;
+    background: var(--ochre-soft);
+    border-radius: 3px;
+  }
+
+  /* ============= PROTOTYPE NAVIGATOR ============= */
+  .proto-nav {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 200;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .proto-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px 8px 12px;
+    background: #1A2332;
+    color: #FBF8F3;
+    border: none;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transition: all 0.2s;
+  }
+  .proto-nav-toggle:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.22); }
+  .proto-nav-toggle svg { width: 13px; height: 13px; opacity: 0.8; }
+  .proto-nav-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #FBF8F3;
+    border: 1px solid #E5DED1;
+    border-radius: 8px;
+    padding: 10px 8px 12px;
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.18), 0 24px 64px rgba(26, 35, 50, 0.12);
+    min-width: 240px;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: all 0.18s ease;
+  }
+  .proto-nav.open .proto-nav-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .proto-nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #9C9588;
+    font-weight: 700;
+    padding: 4px 10px 8px;
+  }
+  .proto-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #1A2332;
+    transition: background 0.15s;
+  }
+  .proto-nav-link:hover { background: #F4EFE6; }
+  .proto-nav-link.is-current {
+    background: #1A2332;
+    color: #FBF8F3;
+  }
+  .proto-nav-link.is-current:hover { background: #2D3848; }
+  .proto-nav-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C8975A;
+    background: #FBF1DE;
+    flex-shrink: 0;
+  }
+  .proto-nav-link.is-current .proto-nav-num {
+    background: #C8975A;
+    color: #FBF8F3;
+  }
+  .proto-nav-link-secondary .proto-nav-num {
+    background: transparent;
+    color: #9C9588;
+    font-size: 14px;
+  }
+  .proto-nav-link.is-current.proto-nav-link-secondary .proto-nav-num {
+    background: rgba(255,255,255,0.15);
+    color: #FBF8F3;
+  }
+  .proto-nav-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.3;
+  }
+  .proto-nav-text strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .proto-nav-text em {
+    font-style: normal;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .proto-nav-divider {
+    height: 1px;
+    background: #E5DED1;
+    margin: 6px 8px;
+  }
+  .proto-nav-link.is-current .proto-nav-text em { opacity: 0.85; }
+  
 </style>
 </head>
-<body>
+<body data-proto-view="family">
 
 <div class="app">
   <header>
@@ -1273,8 +1585,8 @@
             <span id="lang-label">English</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <div class="input-mode-toggle">
-            <button id="mode-voice" class="active">Speak</button>
+          <div class="input-mode-toggle" id="input-mode-toggle">
+            <button id="mode-voice">Speak</button>
             <button id="mode-text">Type</button>
           </div>
         </div>
@@ -1283,8 +1595,36 @@
           You're writing in <strong id="lang-note-name">Spanish</strong>. We'll show our team both your original words and an English translation. The published version will be your translation, with a note that it was translated.
         </div>
 
+        <!-- Mode chooser -->
+        <div class="mode-chooser" id="mode-chooser">
+          <div class="mode-cards">
+            <button type="button" class="mode-card" id="choose-speak">
+              <span class="mode-card-icon mode-card-icon-speak">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                  <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+              </span>
+              <span class="mode-card-label">Speak your letter</span>
+            </button>
+            <button type="button" class="mode-card" id="choose-write">
+              <span class="mode-card-icon mode-card-icon-write">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+                  <line x1="16" y1="8" x2="2" y2="22"></line>
+                  <line x1="17.5" y1="15" x2="9" y2="15"></line>
+                </svg>
+              </span>
+              <span class="mode-card-label">Type your letter</span>
+            </button>
+          </div>
+          <p class="mode-chooser-desc">Take your time. Speak in whatever language feels most natural, or type at your own pace. There's no time limit, and you can start over whenever you'd like.</p>
+        </div>
+
         <!-- Voice mode -->
-        <div class="voice-stage active" id="voice-stage">
+        <div class="voice-stage" id="voice-stage">
           <button class="mic-button" id="mic-btn" aria-label="Start recording">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -1327,9 +1667,17 @@
             <div class="ai-prompt-question">We didn't catch what your kids are interested in. Would you like to share a hobby or favorite thing for each one? It helps us pick gifts they'll love.</div>
             <div class="ai-prompt-actions">
               <input type="text" id="ai-answer" placeholder="Sofia loves drawing, Luis loves trucks…" />
-              <button id="ai-submit">Add</button>
+              <button id="ai-submit" disabled>Add</button>
             </div>
             <button class="ai-prompt-skip" id="ai-skip">Skip — that's plenty</button>
+            <div class="ai-prompt-added" id="ai-prompt-added">
+              <div class="ai-added-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Added to your letter
+              </div>
+              <div class="ai-added-quote" id="ai-added-quote"></div>
+              <button class="ai-added-edit" id="ai-added-edit">Change my answer</button>
+            </div>
           </div>
         </div>
 
@@ -1451,12 +1799,16 @@
       <div class="btn-row">
         <button class="btn-primary" id="restart-btn">Done</button>
       </div>
+
+      <a class="proto-handoff" href="globe-santa-queue.html">
+        <span class="proto-handoff-tag">Prototype</span>
+        See what happens next on Tammy's side
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
     </section>
 
   </main>
 </div>
-
-<div class="proto-banner">Prototype</div>
 
 <script>
   // ============= STATE =============
@@ -1472,7 +1824,7 @@
     phone: '',
     children: [{ first: '', last: '', dob: '', gender: null }],
     letter: '',
-    letterMode: 'voice',
+    letterMode: null,
     language: 'en',
     languageName: 'English',
     excerpt: true,
@@ -1532,7 +1884,7 @@
     address: 'Fill in your address and let us know if you\'ll be here for delivery.',
     contact: 'Add an email address so we can send your confirmation.',
     children: 'Complete each child\'s name, date of birth, and gender.',
-    letter: 'Record or type a few words to continue. There\'s no minimum length.',
+    letter: 'Choose how you\'d like to share your letter to continue.',
   };
 
   function isValidEmail(e) {
@@ -1563,6 +1915,7 @@
       );
     }
     if (screen === 'letter') {
+      if (!state.letterMode) return false;
       const text = state.letterMode === 'text'
         ? document.getElementById('letter-text').value.trim()
         : document.getElementById('transcription-text').value.trim();
@@ -1814,30 +2167,52 @@
     renderChildren();
   });
 
-  // ============= LETTER — voice / text toggle =============
+  // ============= LETTER — chooser → voice / write =============
+  const modeChooser = document.getElementById('mode-chooser');
+  const modeToggle = document.getElementById('input-mode-toggle');
   const modeVoiceBtn = document.getElementById('mode-voice');
   const modeTextBtn = document.getElementById('mode-text');
   const voiceStage = document.getElementById('voice-stage');
   const textStage = document.getElementById('text-stage');
   const transcriptionReview = document.getElementById('transcription-review');
 
-  modeVoiceBtn.addEventListener('click', () => {
+  function enterVoiceMode() {
+    if (modeChooser) modeChooser.style.display = 'none';
+    modeToggle.classList.add('visible');
     modeVoiceBtn.classList.add('active');
     modeTextBtn.classList.remove('active');
     voiceStage.style.display = 'flex';
+    voiceStage.classList.add('active');
     textStage.style.display = 'none';
     state.letterMode = 'voice';
     updateValidation();
-  });
-  modeTextBtn.addEventListener('click', () => {
+  }
+  function enterWriteMode() {
+    if (modeChooser) modeChooser.style.display = 'none';
+    modeToggle.classList.add('visible');
     modeTextBtn.classList.add('active');
     modeVoiceBtn.classList.remove('active');
     voiceStage.style.display = 'none';
+    voiceStage.classList.remove('active');
     transcriptionReview.classList.remove('active');
     textStage.style.display = 'block';
     state.letterMode = 'text';
     updateValidation();
+    setTimeout(() => {
+      const ta = document.getElementById('letter-text');
+      if (ta) ta.focus();
+    }, 100);
+  }
+
+  document.getElementById('choose-speak').addEventListener('click', () => {
+    enterVoiceMode();
+    // user has already signaled intent — skip "Tap to begin" and start listening
+    requestAnimationFrame(() => startRecording());
   });
+  document.getElementById('choose-write').addEventListener('click', enterWriteMode);
+
+  modeVoiceBtn.addEventListener('click', enterVoiceMode);
+  modeTextBtn.addEventListener('click', enterWriteMode);
 
   // ============= VOICE — simulated recording =============
   const micBtn = document.getElementById('mic-btn');
@@ -1855,43 +2230,47 @@
     return `${m}:${sec.toString().padStart(2, '0')}`;
   }
 
-  micBtn.addEventListener('click', () => {
-    if (!recording && !transcriptionReview.classList.contains('active')) {
-      // start
-      recording = true;
-      micBtn.classList.add('recording');
-      waveform.classList.add('visible');
-      voiceTimer.classList.add('visible');
-      voiceInstruction.textContent = 'Listening...';
-      voiceSub.textContent = 'Tap the microphone again when you\'re finished.';
-      elapsed = 0;
+  function startRecording() {
+    if (recording || transcriptionReview.classList.contains('active')) return;
+    recording = true;
+    micBtn.classList.add('recording');
+    waveform.classList.add('visible');
+    voiceTimer.classList.add('visible');
+    voiceInstruction.textContent = 'Listening...';
+    voiceSub.textContent = 'Tap the microphone when you\'re finished.';
+    elapsed = 0;
+    voiceTimer.textContent = formatTime(elapsed);
+    timerInterval = setInterval(() => {
+      elapsed++;
       voiceTimer.textContent = formatTime(elapsed);
-      timerInterval = setInterval(() => {
-        elapsed++;
-        voiceTimer.textContent = formatTime(elapsed);
-      }, 1000);
-    } else if (recording) {
-      // stop and "process"
-      recording = false;
-      micBtn.classList.remove('recording');
-      waveform.classList.remove('visible');
-      voiceInstruction.textContent = 'Transcribing...';
-      voiceSub.textContent = 'One moment while we capture your words.';
-      clearInterval(timerInterval);
+    }, 1000);
+  }
+
+  function stopRecording() {
+    if (!recording) return;
+    recording = false;
+    micBtn.classList.remove('recording');
+    waveform.classList.remove('visible');
+    voiceInstruction.textContent = 'Transcribing...';
+    voiceSub.textContent = 'One moment while we capture your words.';
+    clearInterval(timerInterval);
+    setTimeout(() => {
+      voiceStage.classList.remove('active');
+      transcriptionReview.classList.add('active');
+      if (state.language !== 'en') {
+        document.getElementById('lang-note').classList.add('visible');
+        document.getElementById('lang-note-name').textContent = state.languageName;
+      }
+      updateValidation();
       setTimeout(() => {
-        voiceStage.classList.remove('active');
-        transcriptionReview.classList.add('active');
-        if (state.language !== 'en') {
-          document.getElementById('lang-note').classList.add('visible');
-          document.getElementById('lang-note-name').textContent = state.languageName;
-        }
-        updateValidation();
-        // show AI prompt after a beat
-        setTimeout(() => {
-          document.getElementById('ai-prompt').classList.add('visible');
-        }, 700);
-      }, 1100);
-    }
+        document.getElementById('ai-prompt').classList.add('visible');
+      }, 700);
+    }, 1100);
+  }
+
+  micBtn.addEventListener('click', () => {
+    if (recording) stopRecording();
+    else startRecording();
   });
 
   document.getElementById('rerecord-btn').addEventListener('click', () => {
@@ -1908,13 +2287,72 @@
   document.getElementById('ai-skip').addEventListener('click', () => {
     document.getElementById('ai-prompt').style.display = 'none';
   });
-  document.getElementById('ai-submit').addEventListener('click', () => {
-    const ans = document.getElementById('ai-answer').value.trim();
-    if (ans) {
-      const txt = document.getElementById('transcription-text');
-      txt.value = txt.value.trim() + '\n\nP.S. ' + ans;
+  // Enable/disable the Add button based on whether there's input
+  const aiAnswerInput = document.getElementById('ai-answer');
+  const aiSubmitBtn = document.getElementById('ai-submit');
+  aiAnswerInput.addEventListener('input', () => {
+    aiSubmitBtn.disabled = !aiAnswerInput.value.trim();
+  });
+  // Pressing Enter inside the input submits
+  aiAnswerInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !aiSubmitBtn.disabled) {
+      e.preventDefault();
+      aiSubmitBtn.click();
     }
-    document.getElementById('ai-prompt').style.display = 'none';
+  });
+
+  function showAddedState(answer) {
+    // Append to the letter
+    const txt = document.getElementById('transcription-text');
+    txt.value = txt.value.trim() + '\n\nP.S. ' + answer;
+    txt.scrollTop = txt.scrollHeight;
+
+    // Hide the question pieces, show the success piece — using direct styles for reliability
+    document.querySelector('.ai-prompt-label').style.display = 'none';
+    document.querySelector('.ai-prompt-question').style.display = 'none';
+    document.querySelector('.ai-prompt-actions').style.display = 'none';
+    document.querySelector('.ai-prompt-skip').style.display = 'none';
+
+    const added = document.getElementById('ai-prompt-added');
+    document.getElementById('ai-added-quote').textContent = answer;
+    added.style.display = 'block';
+
+    // Visual transition on the card itself
+    const prompt = document.getElementById('ai-prompt');
+    prompt.style.background = 'var(--sage-soft)';
+    prompt.style.borderColor = 'var(--sage)';
+    prompt.classList.add('is-added');
+  }
+
+  function showQuestionState() {
+    document.querySelector('.ai-prompt-label').style.display = '';
+    document.querySelector('.ai-prompt-question').style.display = '';
+    document.querySelector('.ai-prompt-actions').style.display = '';
+    document.querySelector('.ai-prompt-skip').style.display = '';
+    document.getElementById('ai-prompt-added').style.display = 'none';
+    const prompt = document.getElementById('ai-prompt');
+    prompt.style.background = '';
+    prompt.style.borderColor = '';
+    prompt.classList.remove('is-added');
+  }
+
+  aiSubmitBtn.addEventListener('click', () => {
+    const ans = aiAnswerInput.value.trim();
+    if (!ans) return;
+    showAddedState(ans);
+  });
+
+  document.getElementById('ai-added-edit').addEventListener('click', () => {
+    // strip the last P.S. so re-answering is clean
+    const txt = document.getElementById('transcription-text');
+    const lines = txt.value.split('\n\nP.S. ');
+    if (lines.length > 1) {
+      lines.pop();
+      txt.value = lines.join('\n\nP.S. ');
+    }
+    showQuestionState();
+    aiAnswerInput.focus();
+    aiAnswerInput.select();
   });
 
   // ============= LANGUAGE selector =============
@@ -2007,5 +2445,65 @@
 
 </script>
 
+<div class="proto-nav" id="proto-nav">
+  <button class="proto-nav-toggle" id="proto-nav-toggle" aria-label="Prototype navigator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>Prototype</span>
+  </button>
+  <div class="proto-nav-panel" id="proto-nav-panel">
+    <div class="proto-nav-label">Demo views</div>
+    <a href="globe-santa-prototype.html" class="proto-nav-link" data-view="family">
+      <span class="proto-nav-num">1</span>
+      <span class="proto-nav-text">
+        <strong>Family</strong>
+        <em>The application form</em>
+      </span>
+    </a>
+    <a href="globe-santa-queue.html" class="proto-nav-link" data-view="queue">
+      <span class="proto-nav-num">2</span>
+      <span class="proto-nav-text">
+        <strong>Queue</strong>
+        <em>Tammy's landing</em>
+      </span>
+    </a>
+    <a href="globe-santa-review-tool.html" class="proto-nav-link" data-view="review">
+      <span class="proto-nav-num">3</span>
+      <span class="proto-nav-text">
+        <strong>Review</strong>
+        <em>Single application</em>
+      </span>
+    </a>
+    <div class="proto-nav-divider"></div>
+    <a href="globe-santa-principles.html" class="proto-nav-link proto-nav-link-secondary" data-view="principles">
+      <span class="proto-nav-num">·</span>
+      <span class="proto-nav-text">
+        <strong>Principles</strong>
+        <em>The thinking behind it</em>
+      </span>
+    </a>
+  </div>
+</div>
+<script>
+  (function() {
+    var nav = document.getElementById('proto-nav');
+    var toggle = document.getElementById('proto-nav-toggle');
+    if (!nav || !toggle) return;
+    var current = document.body.getAttribute('data-proto-view');
+    if (current) {
+      var link = nav.querySelector('[data-view="' + current + '"]');
+      if (link) link.classList.add('is-current');
+    }
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target)) nav.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') nav.classList.remove('open');
+    });
+  })();
+</script>
 </body>
 </html>

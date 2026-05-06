@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Globe Santa · Queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Source+Serif+4:opsz,wght@8..60,300..700&family=Source+Sans+3:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF8F3;
+    --parchment: #F4EFE6;
+    --paper: #FFFFFF;
+    --ink: #1A2332;
+    --ink-soft: #2D3848;
+    --ink-muted: #6B6358;
+    --ink-light: #9C9588;
+    --rule: #E5DED1;
+    --rule-soft: #EDE8DC;
+    --red: #B8312F;
+    --red-deep: #8E1F1D;
+    --red-soft: #FBEEEE;
+    --sage: #4A6B5C;
+    --sage-soft: #E8EFE9;
+    --ochre: #C8975A;
+    --ochre-soft: #FBF1DE;
+    --navy-dark: #131B26;
+    --info: #1A4A7C;
+    --info-soft: #DEEEF7;
+    --shadow-sm: 0 1px 2px rgba(26, 35, 50, 0.04), 0 1px 3px rgba(26, 35, 50, 0.06);
+    --shadow-md: 0 4px 6px rgba(26, 35, 50, 0.05), 0 10px 20px rgba(26, 35, 50, 0.08);
+    --shadow-lg: 0 12px 24px rgba(26, 35, 50, 0.08), 0 24px 48px rgba(26, 35, 50, 0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* ============= TOP NAV (matches review tool) ============= */
+  .top-nav {
+    background: var(--navy-dark);
+    color: var(--cream);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-brand {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  .nav-brand .santa {
+    color: #E8423F;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255,255,255,0.18);
+  }
+
+  .nav-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    margin-left: 8px;
+  }
+  .nav-tab {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s;
+    border-radius: 4px;
+  }
+  .nav-tab:hover { color: rgba(255,255,255,0.85); }
+  .nav-tab.active {
+    color: var(--cream);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ochre);
+    color: var(--navy-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: 'Fraunces', serif;
+  }
+  .user-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ============= PAGE HEADER ============= */
+  .page-header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    padding: 36px 32px 36px;
+  }
+
+  .page-header-row {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 36px;
+    flex-wrap: wrap;
+  }
+
+  .greeting {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    margin-bottom: 12px;
+  }
+  .greeting em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .greeting-sub {
+    font-size: 14.5px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+  .greeting-sub strong { color: var(--ink); font-weight: 600; }
+
+  .stats-strip {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .stat {
+    padding: 16px 22px;
+    border-right: 1px solid var(--rule);
+    min-width: 100px;
+    text-align: center;
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 6px;
+    font-variation-settings: "opsz" 144;
+  }
+  .stat-num.is-pending { color: var(--ochre); }
+  .stat-num.is-flagged { color: var(--red); }
+  .stat-num.is-approved { color: var(--sage); }
+
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  /* ============= MAIN ============= */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 32px 80px;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 220px;
+    max-width: 360px;
+    position: relative;
+  }
+  .search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-light);
+    width: 14px;
+    height: 14px;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 9px 12px 9px 34px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.5px;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--ink-soft);
+    box-shadow: 0 0 0 3px rgba(26, 35, 50, 0.06);
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .chip.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .chip .chip-count {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip svg { width: 12px; height: 12px; }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--rule);
+    margin: 0 4px;
+  }
+
+  .toolbar-spacer { flex: 1; }
+
+  .sort-dropdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px 7px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sort-dropdown svg { width: 12px; height: 12px; color: var(--ink-light); }
+  .sort-dropdown strong { color: var(--ink); font-weight: 600; }
+
+  /* ============= SMART GROUPS (AI) ============= */
+  .smart-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: linear-gradient(90deg, var(--ochre-soft) 0%, rgba(251, 241, 222, 0.4) 100%);
+    border: 1px solid #ECC994;
+    border-radius: 6px;
+    margin-bottom: 32px;
+  }
+
+  .ai-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    background: var(--ochre);
+    color: var(--paper);
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    flex-shrink: 0;
+  }
+  .ai-pill::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--paper);
+    border-radius: 50%;
+  }
+
+  .smart-bar-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .smart-bar-text strong { font-weight: 600; }
+
+  .smart-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .smart-btn {
+    padding: 6px 11px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .smart-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .smart-btn.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .smart-btn.primary:hover { background: var(--red); border-color: var(--red); }
+
+  /* ============= QUEUE LIST ============= */
+  .queue-section {
+    margin-bottom: 48px;
+  }
+
+  .queue-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .queue-section-title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .queue-section-count {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 0.18em;
+    font-weight: 500;
+  }
+  .queue-section-hint {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  /* Queue rows */
+  .queue-list {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .queue-row {
+    display: grid;
+    grid-template-columns: 36px 220px 1fr auto auto;
+    gap: 22px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--rule-soft);
+    cursor: pointer;
+    transition: background 0.12s;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .queue-row:last-child { border-bottom: none; }
+  .queue-row:hover { background: var(--cream); }
+
+  /* Avatar/initials cell */
+  .row-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--ochre-soft);
+    color: var(--ochre);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .row-avatar.lang-es { background: var(--red-soft); color: var(--red); }
+  .row-avatar.lang-pt { background: var(--sage-soft); color: var(--sage); }
+  .row-avatar.lang-ht { background: var(--info-soft); color: var(--info); }
+
+  /* Family identity cell */
+  .row-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .row-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row-meta {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .row-meta .dot {
+    width: 2.5px;
+    height: 2.5px;
+    background: var(--ink-light);
+    border-radius: 50%;
+  }
+
+  /* Letter preview cell */
+  .row-preview {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    min-width: 0;
+    font-weight: 400;
+  }
+
+  /* Tag cell */
+  .row-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 200px;
+  }
+
+  .row-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .tag-ai-flagged {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+  }
+  .tag-ai-flagged::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: var(--ochre);
+    border-radius: 50%;
+  }
+  .tag-newchild {
+    background: var(--info-soft);
+    color: var(--info);
+  }
+  .tag-moving {
+    background: var(--ochre-soft);
+    color: var(--ochre);
+  }
+  .tag-no-prior {
+    background: var(--sage-soft);
+    color: var(--sage);
+  }
+  .tag-flagged-editor {
+    background: var(--red-soft);
+    color: var(--red);
+  }
+  .tag-attention {
+    background: var(--info-soft);
+    color: var(--info);
+  }
+  .tag-attention::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: var(--info);
+    border-radius: 50%;
+  }
+
+  /* Time cell */
+  .row-time {
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    min-width: 64px;
+  }
+
+  /* On-hold visual treatment */
+  .queue-row.is-onhold {
+    background: linear-gradient(90deg, rgba(251, 241, 222, 0.5) 0%, transparent 80%);
+  }
+  .queue-row.is-onhold:hover {
+    background: linear-gradient(90deg, rgba(251, 241, 222, 0.7) 0%, var(--cream) 80%);
+  }
+
+  /* Empty queue state */
+  .queue-empty {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--ink-muted);
+  }
+  .queue-empty-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .queue-empty-sub {
+    font-size: 13px;
+  }
+
+  /* ============= RESPONSIVE ============= */
+  @media (max-width: 900px) {
+    .queue-row {
+      grid-template-columns: 28px 1fr auto;
+      grid-template-areas:
+        "avatar identity time"
+        ". preview preview"
+        ". tags tags";
+      gap: 8px 12px;
+    }
+    .row-avatar { grid-area: avatar; align-self: start; margin-top: 2px; }
+    .row-identity { grid-area: identity; }
+    .row-preview { grid-area: preview; }
+    .row-tags { grid-area: tags; justify-content: flex-start; max-width: none; }
+    .row-time { grid-area: time; }
+  }
+
+
+  /* ============= PROTOTYPE NAVIGATOR ============= */
+  .proto-nav {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 200;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .proto-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px 8px 12px;
+    background: #1A2332;
+    color: #FBF8F3;
+    border: none;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transition: all 0.2s;
+  }
+  .proto-nav-toggle:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.22); }
+  .proto-nav-toggle svg { width: 13px; height: 13px; opacity: 0.8; }
+  .proto-nav-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #FBF8F3;
+    border: 1px solid #E5DED1;
+    border-radius: 8px;
+    padding: 10px 8px 12px;
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.18), 0 24px 64px rgba(26, 35, 50, 0.12);
+    min-width: 240px;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: all 0.18s ease;
+  }
+  .proto-nav.open .proto-nav-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .proto-nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #9C9588;
+    font-weight: 700;
+    padding: 4px 10px 8px;
+  }
+  .proto-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #1A2332;
+    transition: background 0.15s;
+  }
+  .proto-nav-link:hover { background: #F4EFE6; }
+  .proto-nav-link.is-current {
+    background: #1A2332;
+    color: #FBF8F3;
+  }
+  .proto-nav-link.is-current:hover { background: #2D3848; }
+  .proto-nav-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C8975A;
+    background: #FBF1DE;
+    flex-shrink: 0;
+  }
+  .proto-nav-link.is-current .proto-nav-num {
+    background: #C8975A;
+    color: #FBF8F3;
+  }
+  .proto-nav-link-secondary .proto-nav-num {
+    background: transparent;
+    color: #9C9588;
+    font-size: 14px;
+  }
+  .proto-nav-link.is-current.proto-nav-link-secondary .proto-nav-num {
+    background: rgba(255,255,255,0.15);
+    color: #FBF8F3;
+  }
+  .proto-nav-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.3;
+  }
+  .proto-nav-text strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .proto-nav-text em {
+    font-style: normal;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .proto-nav-divider {
+    height: 1px;
+    background: #E5DED1;
+    margin: 6px 8px;
+  }
+  .proto-nav-link.is-current .proto-nav-text em { opacity: 0.85; }
+  
+</style>
+</head>
+<body data-proto-view="queue">
+
+  <!-- ============= TOP NAV ============= -->
+  <nav class="top-nav">
+    <div class="top-nav-left">
+      <span class="nav-brand">Globe<span class="santa">Santa</span></span>
+      <span class="nav-divider"></span>
+      <span class="nav-section-label">Editorial Review</span>
+    </div>
+    <div class="top-nav-right">
+      <div class="user-chip">
+        <div class="user-avatar">T</div>
+        <span class="user-name">Tammy Reilly</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============= PAGE HEADER ============= -->
+  <header class="page-header">
+    <div class="page-header-row">
+      <div>
+        <h1 class="greeting">Good morning, <em>Tammy</em>.</h1>
+        <p class="greeting-sub">There are <strong>47 applications</strong> waiting for you. Most should take just a few minutes each.</p>
+      </div>
+      <div class="stats-strip">
+        <div class="stat">
+          <div class="stat-num is-pending">47</div>
+          <div class="stat-label">Awaiting review</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num is-flagged">8</div>
+          <div class="stat-label">Need attention</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">5</div>
+          <div class="stat-label">On hold</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num is-approved">312</div>
+          <div class="stat-label">Approved this week</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============= TOOLBAR ============= -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" placeholder="Search families, addresses, letters…" />
+      </div>
+      <div class="filter-chips">
+        <button class="chip active" data-filter="all">All <span class="chip-count">47</span></button>
+        <button class="chip" data-filter="attention">Need attention <span class="chip-count">8</span></button>
+        <button class="chip" data-filter="editor">Flagged for editor <span class="chip-count">12</span></button>
+        <button class="chip" data-filter="non-english">Non-English letters <span class="chip-count">9</span></button>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <button class="sort-dropdown">
+        Sort by <strong>oldest first</strong>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- ============= AI SMART BAR ============= -->
+    <div class="smart-bar">
+      <span class="ai-pill">AI</span>
+      <div class="smart-bar-text">
+        <strong>32 applications passed all operational checks</strong> and have no editorial flags. You can review them in batch — about 12 minutes total — and focus your reading time on the 15 that need a human eye.
+      </div>
+      <div class="smart-actions">
+        <a class="smart-btn primary" href="globe-santa-review-tool.html">Start with the 15 →</a>
+      </div>
+    </div>
+
+    <!-- ============= NEEDS ATTENTION ============= -->
+    <section class="queue-section">
+      <header class="queue-section-header">
+        <span class="queue-section-title">Needs your attention</span>
+        <span class="queue-section-count">· 8</span>
+        <span class="queue-section-hint">AI noticed something worth a closer look</span>
+      </header>
+
+      <div class="queue-list">
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-es">M</div>
+          <div class="row-identity">
+            <div class="row-name">Maria Otano Ceballos</div>
+            <div class="row-meta">Roxbury · 2 children · AP 451-728</div>
+          </div>
+          <div class="row-preview">"Mi esposo perdió su trabajo en el almacén en mayo, y hemos estado tratando de mantenernos al día con la renta y la comida desde entonces…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-attention">Mentions older child</span>
+            <span class="row-tag tag-ai-flagged">Editor candidate</span>
+          </div>
+          <div class="row-time">2h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">A</div>
+          <div class="row-identity">
+            <div class="row-name">Aisha Williams</div>
+            <div class="row-meta">Mattapan · 4 children · AP 392-441</div>
+          </div>
+          <div class="row-preview">"My oldest daughter Janice was diagnosed with leukemia in March. The treatments have been going well but everything has been so much harder this year…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-ai-flagged">Editor candidate</span>
+          </div>
+          <div class="row-time">3h ago</div>
+        </a>
+
+        <a class="queue-row is-onhold" href="globe-santa-review-tool.html">
+          <div class="row-avatar">D</div>
+          <div class="row-identity">
+            <div class="row-name">Daniel & Rosa Pérez</div>
+            <div class="row-meta">Chelsea · 3 children · AP 514-220</div>
+          </div>
+          <div class="row-preview">"We're moving from our current apartment by November 30 and don't have the new address yet. We will send it as soon as our lease is signed…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-moving">Awaiting new address</span>
+          </div>
+          <div class="row-time">5h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-pt">G</div>
+          <div class="row-identity">
+            <div class="row-name">Gabriela Cardoso</div>
+            <div class="row-meta">Somerville · 2 children · AP 477-105</div>
+          </div>
+          <div class="row-preview">"Estou escrevendo porque meus filhos amam muito o Natal, mas este ano meu marido faleceu em agosto e tudo mudou para nossa família…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-ai-flagged">Editor candidate</span>
+          </div>
+          <div class="row-time">6h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">J</div>
+          <div class="row-identity">
+            <div class="row-name">James Brennan</div>
+            <div class="row-meta">Dorchester · 5 children · AP 488-901</div>
+          </div>
+          <div class="row-preview">"I have a new baby — Lily — born in October who isn't on the original list since I applied last year and we hadn't had her yet…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-newchild">New child mentioned</span>
+          </div>
+          <div class="row-time">8h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-ht">N</div>
+          <div class="row-identity">
+            <div class="row-name">Nadège Joseph</div>
+            <div class="row-meta">Hyde Park · 3 children · AP 503-617</div>
+          </div>
+          <div class="row-preview">"Mwen rele Nadège, e mwen ekri pou twa pitit mwen yo. Lannen sa a te difisil anpil paske mwen pèdi travay mwen nan mwa jiyè…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-ai-flagged">Editor candidate</span>
+          </div>
+          <div class="row-time">10h ago</div>
+        </a>
+
+        <a class="queue-row is-onhold" href="globe-santa-review-tool.html">
+          <div class="row-avatar">P</div>
+          <div class="row-identity">
+            <div class="row-name">Patricia Nguyễn</div>
+            <div class="row-meta">East Boston · 2 children · AP 519-238</div>
+          </div>
+          <div class="row-preview">"My address is changing on December 5th when we move into the new apartment in Revere. Can I send the updated address then?…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-moving">Awaiting new address</span>
+          </div>
+          <div class="row-time">14h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">L</div>
+          <div class="row-identity">
+            <div class="row-name">Latisha Foster</div>
+            <div class="row-meta">Roxbury · 2 children · AP 460-883</div>
+          </div>
+          <div class="row-preview">"After my husband was deployed overseas this year, our 4-year-old has been having such a hard time. The holidays are when he asks about his dad the most…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-ai-flagged">Editor candidate</span>
+          </div>
+          <div class="row-time">1d ago</div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============= REGULAR QUEUE ============= -->
+    <section class="queue-section">
+      <header class="queue-section-header">
+        <span class="queue-section-title">Routine review</span>
+        <span class="queue-section-count">· 39</span>
+        <span class="queue-section-hint">All operational checks passed — read & approve</span>
+      </header>
+
+      <div class="queue-list">
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">S</div>
+          <div class="row-identity">
+            <div class="row-name">Sarah Kim</div>
+            <div class="row-meta">Quincy · 3 children · AP 502-119</div>
+          </div>
+          <div class="row-preview">"Thank you so much for your program. My boys (ages 6, 8, and 10) are looking forward to Christmas more than anything…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-no-prior">No prior year</span>
+          </div>
+          <div class="row-time">11h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-es">C</div>
+          <div class="row-identity">
+            <div class="row-name">Carmen Rodríguez</div>
+            <div class="row-meta">East Boston · 2 children · AP 488-336</div>
+          </div>
+          <div class="row-preview">"Soy madre soltera de dos niños hermosos, Diego y Marisol. Trabajo de noche en el hospital y hago lo mejor que puedo…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-no-prior">No prior year</span>
+          </div>
+          <div class="row-time">12h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">R</div>
+          <div class="row-identity">
+            <div class="row-name">Robert & Elaine McCarthy</div>
+            <div class="row-meta">South Boston · 1 child · AP 471-225</div>
+          </div>
+          <div class="row-preview">"Our son Tommy is 7 and the sweetest little boy you'll meet. Times have been tight since I had to leave my job to care for my mother…"</div>
+          <div class="row-tags"></div>
+          <div class="row-time">14h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-pt">F</div>
+          <div class="row-identity">
+            <div class="row-name">Fernanda Souza</div>
+            <div class="row-meta">Allston · 4 children · AP 495-771</div>
+          </div>
+          <div class="row-preview">"Tenho quatro filhos: João (10), Marcos (8), Beatriz (5) e o pequeno Daniel (2). Estamos tentando construir uma vida nova aqui…"</div>
+          <div class="row-tags">
+            <span class="row-tag tag-no-prior">No prior year</span>
+          </div>
+          <div class="row-time">15h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">D</div>
+          <div class="row-identity">
+            <div class="row-name">DeShawn Adams</div>
+            <div class="row-meta">Mattapan · 3 children · AP 490-554</div>
+          </div>
+          <div class="row-preview">"My three boys mean everything to me. I'm a single dad working two jobs and just trying to keep us afloat. Anything you can do means the world…"</div>
+          <div class="row-tags"></div>
+          <div class="row-time">16h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">M</div>
+          <div class="row-identity">
+            <div class="row-name">Margaret O'Brien</div>
+            <div class="row-meta">Roslindale · 2 children · AP 481-009</div>
+          </div>
+          <div class="row-preview">"My grandchildren Riley and Sean live with me full-time now. They've been through a lot but they're such bright lights in my life…"</div>
+          <div class="row-tags"></div>
+          <div class="row-time">18h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar lang-es">E</div>
+          <div class="row-identity">
+            <div class="row-name">Esperanza Vargas</div>
+            <div class="row-meta">Lynn · 2 children · AP 498-225</div>
+          </div>
+          <div class="row-preview">"Mis hijas Lucia y Valentina son lo más importante en mi vida. Este año hemos tenido muchas dificultades pero ellas siempre sonríen…"</div>
+          <div class="row-tags"></div>
+          <div class="row-time">20h ago</div>
+        </a>
+
+        <a class="queue-row" href="globe-santa-review-tool.html">
+          <div class="row-avatar">B</div>
+          <div class="row-identity">
+            <div class="row-name">Brian Sullivan</div>
+            <div class="row-meta">Charlestown · 2 children · AP 487-664</div>
+          </div>
+          <div class="row-preview">"My wife passed away in February and our two kids and I are doing the best we can. They've been so brave through everything…"</div>
+          <div class="row-tags"></div>
+          <div class="row-time">22h ago</div>
+        </a>
+
+        <div class="queue-more" style="padding: 14px 18px; text-align: center; color: var(--ink-muted); font-size: 12px; font-style: italic; border-top: 1px solid var(--rule-soft);">
+          + 31 more
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Empty state for filtered views -->
+    <div class="queue-empty-filter" id="queue-empty-filter" style="display:none; padding: 60px 24px; text-align: center; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;">
+      <div style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 20px; color: var(--ink-soft); margin-bottom: 6px;">Nothing here yet.</div>
+      <div style="font-size: 13px; color: var(--ink-muted);">Try a different filter, or clear it to see everything.</div>
+    </div>
+
+  </main>
+
+<script>
+  // Filter chips — wired to actually narrow the queue
+  const chips = document.querySelectorAll('.chip');
+  const allRows = document.querySelectorAll('.queue-row');
+  const allSections = document.querySelectorAll('.queue-section');
+  const smartBar = document.querySelector('.smart-bar');
+  const queueMore = document.querySelector('.queue-more');
+  const emptyState = document.getElementById('queue-empty-filter');
+
+  function rowMatchesFilter(row, filter) {
+    if (filter === 'all') return true;
+    if (filter === 'editor') return !!row.querySelector('.tag-ai-flagged');
+    if (filter === 'attention') {
+      // Any signal that warrants a closer human look
+      return !!row.querySelector('.tag-ai-flagged, .tag-attention, .tag-newchild, .tag-moving');
+    }
+    if (filter === 'non-english') {
+      const av = row.querySelector('.row-avatar');
+      if (!av) return false;
+      return av.classList.contains('lang-es') ||
+             av.classList.contains('lang-pt') ||
+             av.classList.contains('lang-ht');
+    }
+    return true;
+  }
+
+  function applyFilter(filter) {
+    let visibleCount = 0;
+
+    allRows.forEach(row => {
+      const match = rowMatchesFilter(row, filter);
+      row.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    // Show/hide sections based on whether they have any visible rows
+    allSections.forEach(section => {
+      const sectionRows = section.querySelectorAll('.queue-row');
+      const anyVisible = Array.from(sectionRows).some(r => r.style.display !== 'none');
+      section.style.display = anyVisible ? '' : 'none';
+    });
+
+    // Smart bar and "+ 31 more" only make sense on the unfiltered view
+    if (smartBar) smartBar.style.display = filter === 'all' ? '' : 'none';
+    if (queueMore) queueMore.style.display = filter === 'all' ? '' : 'none';
+
+    // Empty state if absolutely nothing matched
+    if (emptyState) emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      applyFilter(chip.getAttribute('data-filter'));
+    });
+  });
+
+
+</script>
+
+<div class="proto-nav" id="proto-nav">
+  <button class="proto-nav-toggle" id="proto-nav-toggle" aria-label="Prototype navigator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>Prototype</span>
+  </button>
+  <div class="proto-nav-panel" id="proto-nav-panel">
+    <div class="proto-nav-label">Demo views</div>
+    <a href="globe-santa-prototype.html" class="proto-nav-link" data-view="family">
+      <span class="proto-nav-num">1</span>
+      <span class="proto-nav-text">
+        <strong>Family</strong>
+        <em>The application form</em>
+      </span>
+    </a>
+    <a href="globe-santa-queue.html" class="proto-nav-link" data-view="queue">
+      <span class="proto-nav-num">2</span>
+      <span class="proto-nav-text">
+        <strong>Queue</strong>
+        <em>Tammy's landing</em>
+      </span>
+    </a>
+    <a href="globe-santa-review-tool.html" class="proto-nav-link" data-view="review">
+      <span class="proto-nav-num">3</span>
+      <span class="proto-nav-text">
+        <strong>Review</strong>
+        <em>Single application</em>
+      </span>
+    </a>
+    <div class="proto-nav-divider"></div>
+    <a href="globe-santa-principles.html" class="proto-nav-link proto-nav-link-secondary" data-view="principles">
+      <span class="proto-nav-num">·</span>
+      <span class="proto-nav-text">
+        <strong>Principles</strong>
+        <em>The thinking behind it</em>
+      </span>
+    </a>
+  </div>
+</div>
+<script>
+  (function() {
+    var nav = document.getElementById('proto-nav');
+    var toggle = document.getElementById('proto-nav-toggle');
+    if (!nav || !toggle) return;
+    var current = document.body.getAttribute('data-proto-view');
+    if (current) {
+      var link = nav.querySelector('[data-view="' + current + '"]');
+      if (link) link.classList.add('is-current');
+    }
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target)) nav.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') nav.classList.remove('open');
+    });
+  })();
+</script>
+</body>
+</html>
