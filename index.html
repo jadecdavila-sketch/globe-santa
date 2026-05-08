@@ -1248,6 +1248,8 @@
     main { padding: 28px 22px 32px; }
     h1 { font-size: 30px; }
   }
+
+
   /* Prototype handoff — sits below the Done button, walks demos to the next surface */
   .proto-handoff {
     display: flex;
@@ -1443,7 +1445,8 @@
 
       <div class="consent">
         <h3>Before we begin</h3>
-        <p>We'll ask for your name, address, your children's information, and a letter telling us about your family. Your information is private and used only to send your gifts. The Boston Globe Foundation may share excerpts from your letter (without your name) in fundraising stories. You can opt out on the next-to-last step.</p>
+        <p>We'll ask for your name and DTA application ID, your address, your children's information, and a letter telling us about your family. Your information stays private and is used only to send your gifts.</p>
+        <p>The letters are the heart of Globe Santa. The Boston Globe Foundation may share excerpts of your letter to help raise the donations that make next year's gifts possible, but you and your family will remain completely anonymous. By applying, you're sharing your story with the program.</p>
         <label class="checkbox-row">
           <input type="checkbox" id="consent-check" />
           <span>I understand and want to apply.</span>
@@ -1473,6 +1476,12 @@
           </div>
         </div>
         <p class="help-text">If you have two last names, write both. Use the spelling you go by, and we'll keep it exactly as you give it.</p>
+      </div>
+
+      <div class="field-group">
+        <label for="ap-id">Your DTA application ID</label>
+        <input type="text" id="ap-id" inputmode="numeric" maxlength="6" placeholder="6-digit number" autocomplete="off" />
+        <p class="help-text">You'll find this in your DTA Connect app under Globe Santa, or on the green form DTA mailed you. We need it to confirm you with DTA before sending gifts.</p>
       </div>
 
       <div class="btn-row">
@@ -1539,13 +1548,20 @@
       <div class="field-group">
         <label for="email">Email</label>
         <input type="email" id="email" autocomplete="email" placeholder="you@example.com" />
-        <p class="help-text">Confirmation goes here. Check your spam folder if you don't see it within a day.</p>
+        <p class="help-text">Check your spam folder if you don't see it within a day.</p>
+
       </div>
 
       <div class="field-group">
-        <label for="phone">Cell phone <span class="opt">(optional)</span></label>
+        <label for="email-confirm">Confirm your email</label>
+        <input type="email" id="email-confirm" autocomplete="off" placeholder="Re-type your email" />
+        <p class="help-text" id="email-match-msg">Type your email a second time so we can catch any typos.</p>
+      </div>
+
+      <div class="field-group">
+        <label for="phone">Cell phone</label>
         <input type="tel" id="phone" autocomplete="tel" placeholder="(617) 555-0123" inputmode="tel" />
-        <p class="help-text">Helpful if we have a question about your application. We won't text marketing.</p>
+        <p class="help-text">A second way to reach you about your application. We won't text marketing.</p>
       </div>
 
       <div class="btn-row">
@@ -1744,16 +1760,8 @@
       </div>
 
       <div class="consent" style="margin-top:18px;">
-        <h3>Sharing in fundraising stories</h3>
-        <p>Globe Santa is funded by donors who read excerpts from real family letters in The Boston Globe. Excerpts never include your full name or address. May we use parts of your letter?</p>
-        <label class="checkbox-row">
-          <input type="checkbox" id="excerpt-yes" checked />
-          <span>Yes, you may share excerpts (this is the default, and most families say yes).</span>
-        </label>
-        <label class="checkbox-row">
-          <input type="checkbox" id="excerpt-no" />
-          <span>No, please keep my letter private.</span>
-        </label>
+        <h3>How your letter helps</h3>
+        <p>Globe Santa is funded by readers who are moved by the family stories printed in The Boston Globe each holiday season. By submitting your letter, you're helping make next year's gifts possible for another family, and you and your family will remain completely anonymous.</p>
       </div>
 
       <div class="btn-row">
@@ -1816,6 +1824,7 @@
     consent: false,
     firstName: '',
     lastName: '',
+    apId: '',
     street: '',
     city: '',
     zip: '',
@@ -1880,9 +1889,9 @@
 
   // ============= VALIDATION (gating per step) =============
   const STEP_HELPERS = {
-    name: 'Add your first and last name to continue.',
+    name: 'Add your name and 6-digit DTA application ID to continue.',
     address: 'Fill in your address and let us know if you\'ll be here for delivery.',
-    contact: 'Add an email address so we can send your confirmation.',
+    contact: 'Add and confirm your email, plus a phone number, to continue.',
     children: 'Complete each child\'s name, date of birth, and gender.',
     letter: 'Choose how you\'d like to share your letter to continue.',
   };
@@ -1893,8 +1902,10 @@
 
   function validateStep(screen) {
     if (screen === 'name') {
+      const ap = document.getElementById('ap-id').value.trim();
       return document.getElementById('first-name').value.trim().length > 0 &&
-             document.getElementById('last-name').value.trim().length > 0;
+             document.getElementById('last-name').value.trim().length > 0 &&
+             /^\d{6}$/.test(ap);
     }
     if (screen === 'address') {
       return document.getElementById('street').value.trim().length > 0 &&
@@ -1903,7 +1914,13 @@
              state.willBeHere !== null;
     }
     if (screen === 'contact') {
-      return isValidEmail(document.getElementById('email').value.trim());
+      const emailVal = document.getElementById('email').value.trim();
+      const emailConfirmVal = document.getElementById('email-confirm').value.trim();
+      if (!isValidEmail(emailVal)) return false;
+      if (emailVal.toLowerCase() !== emailConfirmVal.toLowerCase()) return false;
+      // Phone now required — at least 10 digits
+      const phoneDigits = document.getElementById('phone').value.replace(/\D/g, '');
+      return phoneDigits.length >= 10;
     }
     if (screen === 'children') {
       if (state.children.length === 0) return false;
@@ -1957,6 +1974,35 @@
       setTimeout(updateValidation, 0);
     }
   });
+
+  // ============= EMAIL CONFIRMATION (double-entry) =============
+  const emailInput = document.getElementById('email');
+  const emailConfirmInput = document.getElementById('email-confirm');
+  const emailMatchMsg = document.getElementById('email-match-msg');
+
+  function checkEmailMatch() {
+    const a = emailInput.value.trim();
+    const b = emailConfirmInput.value.trim();
+    if (!b) {
+      emailMatchMsg.textContent = 'Type your email a second time so we can catch any typos.';
+      emailMatchMsg.style.color = '';
+      return;
+    }
+    if (a.toLowerCase() === b.toLowerCase() && isValidEmail(a)) {
+      emailMatchMsg.textContent = 'Emails match.';
+      emailMatchMsg.style.color = 'var(--sage)';
+    } else if (b.length >= a.length) {
+      emailMatchMsg.textContent = "These don't match yet — please re-check.";
+      emailMatchMsg.style.color = 'var(--ochre)';
+    } else {
+      emailMatchMsg.textContent = 'Type your email a second time so we can catch any typos.';
+      emailMatchMsg.style.color = '';
+    }
+  }
+
+  emailInput.addEventListener('input', checkEmailMatch);
+  emailConfirmInput.addEventListener('input', checkEmailMatch);
+
   document.querySelectorAll('[data-back]').forEach(btn => {
     btn.addEventListener('click', () => showScreen(currentScreen - 1));
   });
@@ -1972,6 +2018,7 @@
     if (screen === 'name') {
       state.firstName = document.getElementById('first-name').value.trim();
       state.lastName = document.getElementById('last-name').value.trim();
+      state.apId = document.getElementById('ap-id').value.trim();
     } else if (screen === 'address') {
       state.street = document.getElementById('street').value.trim();
       state.city = document.getElementById('city').value.trim();
@@ -1988,8 +2035,8 @@
         state.letter = document.getElementById('letter-text').value.trim();
       }
     } else if (screen === 'review') {
-      state.excerpt = document.getElementById('excerpt-yes').checked && !document.getElementById('excerpt-no').checked;
-      // simulate send
+      // By applying, the family is opting in to sharing — Tammy's clarification.
+      state.excerpt = true;
       const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       document.getElementById('sent-date').textContent = today;
     }
@@ -2386,8 +2433,10 @@
 
   // ============= REVIEW =============
   function populateReview() {
-    document.getElementById('review-name').textContent =
-      `${state.firstName} ${state.lastName}`.trim() || '—';
+    const fullName = `${state.firstName} ${state.lastName}`.trim();
+    document.getElementById('review-name').innerHTML = fullName
+      ? `${fullName}${state.apId ? `<br><small style="color:var(--ink-muted);font-family:'Source Sans 3',sans-serif;font-size:12px;">DTA application ID: ${state.apId}</small>` : ''}`
+      : '—';
 
     document.getElementById('review-address').textContent =
       [state.street, [state.city, state.zip].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
@@ -2429,14 +2478,6 @@
     if (m < 0 || (m === 0 && ref.getDate() < birth.getDate())) age--;
     return age;
   }
-
-  // Excerpt mutex
-  document.getElementById('excerpt-yes').addEventListener('change', e => {
-    if (e.target.checked) document.getElementById('excerpt-no').checked = false;
-  });
-  document.getElementById('excerpt-no').addEventListener('change', e => {
-    if (e.target.checked) document.getElementById('excerpt-yes').checked = false;
-  });
 
   // Restart
   document.getElementById('restart-btn').addEventListener('click', () => {
